@@ -8,7 +8,7 @@ using namespace std;
 #include <boost/asio.hpp>
 
 #include "server.h"
-#include "client.h"
+//#include "client.h"
 
 int main() {
     try
@@ -17,9 +17,9 @@ int main() {
         server server(io_service);
         io_service.run();
 
-        boost::asio::io_service io_service2;
-        client client(io_service2, "localhost");
-        client.reciveData("a");
+        //boost::asio::io_service io_service2;
+        //client client(io_service2, "localhost");
+        //client.reciveData("a");
     }
     catch (std::exception& e)
     {

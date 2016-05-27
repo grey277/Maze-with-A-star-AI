@@ -13,7 +13,7 @@ using boost::asio::ip::tcp;
 
 class client {
 public:
-    client(boost::asio::io_service io_service, std::string host) : io_service_(io_service), resolver(io_service_),
+    client(boost::asio::io_service io_service, std::string host) : io_service_(io_service), resolver(io_service),
         query(host), endpoint_iterator(resolver.resolve(query)) { }
 
     void reciveData(std::string data) {
