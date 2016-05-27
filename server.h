@@ -12,39 +12,44 @@
 #include <boost/asio.hpp>
 
 #include <iostream>
+#include "message.h"
+
+class participant
+{
+public:
+    virtual ~chat_participant() {}
+    virtual void deliver(const message& msg) = 0;
+};
+
+typedef std::shared_ptr<participant> participant_ptr;
 
 #include "tcp_connection.h"
+#include "room.h"
+#include "session.h"
 
 using boost::asio::ip::tcp;
 
-
 class server {
 public:
-    server(boost::asio::io_service& ioservice) : acceptor_(ioservice, tcp::endpoint(tcp::v4(), 4009)){
-        start();
+    server(boost::asio::io_service& io_service, const tcp::endpoint& endpoint)
+            : acceptor_(io_service, endpoint),
+              socket_(io_service) {
+        acc();
     }
 private:
     tcp::acceptor acceptor_;
-    void start() {
-        tcp_connection::pointer new_connection =
-                tcp_connection::create(acceptor_.get_io_service());
+    tcp::socket socket_;
+    room room_;
+    void acc() {
+        acceptor_.async_accept(socket_,
+                               [this](boost::system::error_code ec)
+                               {
+                                   if(!ec) {
+                                       std::make_shared<session>(std::move(socket_), room_)->start();
+                                   }
 
-        acceptor_.async_accept(new_connection->socket(),
-                               boost::bind(&server::handle_accept, this, new_connection,
-                                           boost::asio::placeholders::error));
-    }
-
-    void handle_accept(tcp_connection::pointer new_connection,
-                       const boost::system::error_code& error)
-    {
-        if (!error)
-        {
-            new_connection->start();
-        }
-
-        start();
+                                   acc();
+                               });
     }
 };
-
-
 #endif //QUAKEWITHSOCKETS_SERVER_H
