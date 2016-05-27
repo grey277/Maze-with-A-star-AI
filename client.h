@@ -7,17 +7,17 @@
 
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
+#include <boost/shared_ptr.hpp>
 #include <iostream>
 
 using boost::asio::ip::tcp;
 
 class client {
 public:
-    client(boost::asio::io_service io_service, std::string host) : io_service_(io_service), resolver(io_service),
-        query(host), endpoint_iterator(resolver.resolve(query)) { }
+    client(boost::shared_ptr<boost::asio::io_service> io_service, std::string host) : socket(*io_service), resolver(*io_service),
+        query(tcp::v4(), "localhost", "4009"), endpoint_iterator(resolver.resolve(query)) { }
 
     void reciveData(std::string data) {
-        tcp::socket socket(io_service_);
         boost::asio::connect(socket, endpoint_iterator);
         while(true) {
             boost::array<char, 128> buf;
@@ -35,10 +35,10 @@ public:
 
 
 private:
-    boost::asio::io_service io_service_;
     tcp::resolver resolver;
     tcp::resolver::query query;
     tcp::resolver::iterator endpoint_iterator;
+    tcp::socket socket;
 };
 
 #endif //QUAKEWITHSOCKETS_CLIENT_H

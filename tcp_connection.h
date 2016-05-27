@@ -30,7 +30,7 @@ public:
 
   void start()
   {
-    message_ = "123";
+    message_ = "123   ";
 
     boost::asio::async_write(socket_, boost::asio::buffer(message_),
         boost::bind(&tcp_connection::handle_write, shared_from_this(),
