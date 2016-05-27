@@ -5,6 +5,12 @@
 #ifndef QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
 #define QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
 
+#include <cmath>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
 const int horizontalSize = 10;
 const int verticalSize = 10;
 static int map[horizontalSize][verticalSize];
