@@ -93,7 +93,7 @@ public:
         priority = node.priority;
     }
 
-    bool operator<(const Node& other) const{ //TODO, add const
+    bool operator<(const Node& other) const {
         return this->priority > other.priority;
     }
 
