@@ -7,12 +7,13 @@ using namespace std;
 #include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+#include <thread>
 
 #include "server.h"
-#include "client.h"
+
 
 void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {
-    server server(*io_service);
+    server server(*io_service, tcp::endpoint(tcp::v4(), 4009));
     io_service->run();
 }
 
@@ -23,9 +24,6 @@ int main() {
         boost::shared_ptr<boost::asio::io_service::work> work(new boost::asio::io_service::work( *io_service ));
         boost::thread_group threads;
         threads.create_thread(boost::bind(&startServer, io_service));
-
-        client client(io_service, "localhost");
-        client.reciveData("a");
 
         threads.join_all();
 

@@ -17,14 +17,12 @@
 class participant
 {
 public:
-    virtual ~chat_participant() {}
+    virtual ~participant() {}
     virtual void deliver(const message& msg) = 0;
 };
 
 typedef std::shared_ptr<participant> participant_ptr;
 
-#include "tcp_connection.h"
-#include "room.h"
 #include "session.h"
 
 using boost::asio::ip::tcp;
