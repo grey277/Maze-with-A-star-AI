@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(quakeWithSockets)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
-find_package(Boost 1.58 COMPONENTS system thread REQUIRED)
+find_package(Boost 1.54 COMPONENTS system thread REQUIRED)
 
 set(SOURCE_FILES server.cpp server.h message.h session.h findShortestPath.h Game.h)
 add_executable(server ${SOURCE_FILES})

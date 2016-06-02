@@ -10,6 +10,7 @@ using namespace std;
 #include <thread>
 
 #include "server.h"
+#include "findShortestPath.h"
 
 
 void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {
@@ -18,6 +19,7 @@ void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {
 }
 
 int main() {
+
     try
     {
         boost::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
