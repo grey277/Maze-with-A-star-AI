@@ -29,6 +29,14 @@ public:
         }
     }
 
+    int getHorizontalSize(){ return horizontalSize; }
+
+    int getVerticalSize() { return verticalSize; }
+
+    bool canMove(int x, int y) {
+        return true;
+    }
+
     objectType operator()(int x, int y) {
             return map[x][y];
     }
