@@ -10,6 +10,7 @@
 class Renderer {
     const int horizontalSize, verticalSize;
 
+public:
     Renderer(int horizontalSize, int verticalSize) : horizontalSize(horizontalSize), verticalSize(verticalSize) {}
 
     void printTable(objectType** map) {

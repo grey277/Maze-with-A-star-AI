@@ -23,7 +23,13 @@ public:
 
     Map getMap() { return _map; }
 
+    void run(){
+        Renderer renderer(_map.getHorizontalSize(), _map.getVerticalSize());
 
+        while(true){
+            renderer.render(_map.getMap());
+        }
+    }
 
 private:
     Map _map;
