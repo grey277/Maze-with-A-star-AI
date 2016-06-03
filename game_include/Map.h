@@ -29,6 +29,10 @@ public:
         }
     }
 
+    int getHorizontalSize(){ return horizontalSize; }
+
+    int getVerticalSize() { return verticalSize; }
+
     bool canMove(int x, int y) {
         return true;
     }
