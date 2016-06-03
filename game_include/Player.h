@@ -21,6 +21,7 @@ public:
     Player(int startX, int startY, client* client, Map* map) : _client(client), _map(map){
         x = startX;
         y = startY;
+        _map->setPlayerPosition(x, y);
         startThread();
     }
 
@@ -38,15 +39,35 @@ public:
             if(ch > 0) {
                 bool send = false;
                 switch(ch) {
-                    case 'a': if(_map->canMove(x - 1, y)) send = true; break;
-                    case 'd': if(_map->canMove(x + 1, y)) send = true; break;
-                    case 'w': if(_map->canMove(x, y + 1)) send = true; break;
-                    case 's': if(_map->canMove(x, y - 1)) send = true; break;
+                    case 'a': if(_map->canMove(x - 1, y)){
+                            send = true;
+                            _map->updatePlayerPosition(x, y, x - 1, y);
+                            x--;
+                            break;
+                        }
+                    case 'd': if(_map->canMove(x + 1, y)){
+                            send = true;
+                            _map->updatePlayerPosition(x, y, x + 1, y);
+                            x++;
+                            break;
+                        }
+                    case 'w': if(_map->canMove(x, y + 1)){
+                            send = true;
+                            _map->updatePlayerPosition(x, y, x, y + 1);
+                            y++;
+                            break;
+                        }
+                    case 's': if(_map->canMove(x, y - 1)){
+                            send = true;
+                            _map->updatePlayerPosition(x, y, x, y - 1);
+                            y--;
+                            break;
+                        }
                     default: break;
                 }
                 if(send) {
                     message msg;
-                    string m = to_string(to_string(ch);
+                    string m = to_string(x) + "," + to_string(y);
                     msg.body_length(std::strlen(m.c_str()));
                     std::memcpy(msg.body(), m.c_str(), msg.body_length());
                     msg.encode_header();

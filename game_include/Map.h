@@ -37,6 +37,15 @@ public:
         return true;
     }
 
+    void setPlayerPosition(int x, int y) {
+        map[x][y] = PLAYER;
+    }
+
+    void updatePlayerPosition(int oldX, int oldY, int x, int y) {
+        map[oldX][oldY] = NOTHING;
+        map[x][y] = PLAYER;
+    }
+
     objectType operator()(int x, int y) {
             return map[x][y];
     }
