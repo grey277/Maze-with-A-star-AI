@@ -241,39 +241,6 @@ public:
         return ""; // no route found
     }
 
-    void printTable() {
-        for (int y = 0; y < verticalSize; y++) {
-            for (int x = 0; x < horizontalSize; x++) {
-                cout << " ";
-                switch(map[x][y]){
-                    case WALL:
-                        cout << "O";
-                        break;
-                    case PLAYER:
-                        cout << "F"; //finish
-                        break;
-                    //case ENEMY:
-                    //    __throw_domain_error("cannot resolve symbol"); // todo
-                    //    break;
-                    case ENEMY:
-                        cout << "S"; //start
-                        break;
-                    case NOTHING:
-                        cout << ".";
-                        break;
-                    case ITEM:
-                        cout << "I";
-                        break;
-                    case ROUTE:
-                        cout << "R";
-                        break;
-                    default:
-                        __throw_domain_error("cannot resolve symbol");
-                }
-            }
-            cout << endl;
-        }
-    }
 
     void makeTable(string route, Point start) {
         char c;

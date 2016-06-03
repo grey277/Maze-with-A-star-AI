@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "../client_src/client.h"
+#include "Renderer.h"
 
 using namespace std;
 
@@ -21,6 +22,8 @@ public:
     }
 
     Map getMap() { return _map; }
+
+
 
 private:
     Map _map;
