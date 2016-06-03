@@ -35,6 +35,10 @@ public:
         map[playerPosX][playerPosY] = PLAYER;
     }
 
+    objectType operator(int x, int y) {
+            return map[x][y];
+    }
+
     void makeMap(){
         for (int x = 2 + horizontalSize / 8; x < horizontalSize * 7 / 8 - 1; x++) {
             map[x][verticalSize / 2] = WALL;

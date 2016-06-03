@@ -8,8 +8,10 @@
 #include "Object.h"
 
 class Player : public Object {
+private:
+    Game* _game;
 public:
-    Player(int startX, int startY) {
+    Player(int startX, int startY, Game* game) : _game(game) {
         x = startX;
         y = startY;
     }
@@ -20,7 +22,11 @@ public:
 
     void startLisening() {
         while(true) {
-
+            int ch;
+            ch = getch();
+            if(ch) {
+                _game->move(this, ch);
+            }
         }
     }
 };
