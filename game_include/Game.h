@@ -15,25 +15,19 @@ using namespace std;
 
 class Game : public Object {
 public:
-    Game(client* client) : _map(30, 30), _client(client) { }
+    Game(client* client) : _map(30, 30), _client(client) {
+    }
 
     void addPlayer() {
-        _players.push_back(new Player(0, 0, _client, &_map));
+        _players.push_back(new Player(0, 0, _client, &_map, &_renderer));
     }
 
     Map getMap() { return _map; }
-
-    void run(){
-        Renderer renderer(_map.getHorizontalSize(), _map.getVerticalSize());
-
-        while(true){
-            renderer.render(_map.getMap());
-        }
-    }
 
 private:
     Map _map;
     vector<Player*> _players;
     client* _client;
+    Renderer _renderer;
 };
 #endif //QUAKEWITHSOCKETS_GAME_H

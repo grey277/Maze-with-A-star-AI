@@ -8,51 +8,39 @@
 #include <ncurses.h>
 
 class Renderer {
-    const int horizontalSize, verticalSize;
-
 public:
-    Renderer(int horizontalSize, int verticalSize) : horizontalSize(horizontalSize), verticalSize(verticalSize) {}
-
-    void printTable(objectType** map) {
-        for (int y = 0; y < verticalSize; y++) {
-            for (int x = 0; x < horizontalSize; x++) {
-                cout << " ";
-                switch(map[x][y]){
+    void printTable(Map* mapPointer) {
+        for (int y = 0; y < mapPointer->getVerticalSize(); y++) {
+            for (int x = 0; x < mapPointer->getHorizontalSize(); x++) {
+                switch((*mapPointer)(x,y)){
                     case WALL:
-                        cout << "O";
+                        mvaddch(y,x,'O');
                         break;
                     case PLAYER:
-                        cout << "F"; //finish
+                        mvaddch(y,x,'F');
                         break;
                         //case ENEMY:
                         //    __throw_domain_error("cannot resolve symbol"); // todo
                         //    break;
                     case ENEMY:
-                        cout << "S"; //start
+                        mvaddch(y,x,'S');
                         break;
                     case NOTHING:
-                        cout << ".";
+                        mvaddch(y,x,'.');
                         break;
                     case ITEM:
-                        cout << "I";
+                        mvaddch(y,x,'I');
                         break;
                     default:
                         __throw_domain_error("cannot resolve symbol");
                 }
             }
-            cout << endl;
         }
     }
 
-    void render(objectType** map){
-
-        initscr(); //initialize screen
-        curs_set(0);
-
+    void render(Map* map){
         printTable(map);
         refresh();
-        endwin();
-
     }
 };
 

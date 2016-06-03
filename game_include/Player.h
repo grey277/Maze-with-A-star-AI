@@ -8,6 +8,7 @@
 #include <ncurses.h>
 #include "Object.h"
 #include "../client_src/client.h"
+#include "Renderer.h"
 #include <iostream>
 #include <thread>
 
@@ -17,8 +18,10 @@ class Player : protected Object {
 private:
     client* _client;
     Map* _map;
+    Renderer* _renderer;
 public:
-    Player(int startX, int startY, client* client, Map* map) : _client(client), _map(map){
+    Player(int startX, int startY, client* client, Map* map, Renderer* renderer) : _client(client), _map(map),
+        _renderer(renderer) {
         x = startX;
         y = startY;
         _map->setPlayerPosition(x, y);
@@ -51,16 +54,16 @@ public:
                             x++;
                             break;
                         }
-                    case 'w': if(_map->canMove(x, y + 1)){
-                            send = true;
-                            _map->updatePlayerPosition(x, y, x, y + 1);
-                            y++;
-                            break;
-                        }
-                    case 's': if(_map->canMove(x, y - 1)){
+                    case 'w': if(_map->canMove(x, y - 1)){
                             send = true;
                             _map->updatePlayerPosition(x, y, x, y - 1);
                             y--;
+                            break;
+                        }
+                    case 's': if(_map->canMove(x, y + 1)){
+                            send = true;
+                            _map->updatePlayerPosition(x, y, x, y + 1);
+                            y++;
                             break;
                         }
                     default: break;
@@ -72,6 +75,7 @@ public:
                     std::memcpy(msg.body(), m.c_str(), msg.body_length());
                     msg.encode_header();
                     _client->write(msg);
+                    _renderer->render(_map);
                 }
             }
         }
