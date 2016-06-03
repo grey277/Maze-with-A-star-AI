@@ -17,7 +17,7 @@ public:
     Game(client* client) : _map(30, 30), _client(client) { }
 
     void addPlayer() {
-        _players.push_back(new Player(30, 30, _client));
+        _players.push_back(new Player(30, 30, _client, &_map));
     }
 
     Map getMap() { return _map; }

@@ -29,6 +29,10 @@ public:
         }
     }
 
+    bool canMove(int x, int y) {
+        return true;
+    }
+
     objectType operator()(int x, int y) {
             return map[x][y];
     }
