@@ -5,11 +5,10 @@
 #ifndef QUAKE_MAP_H
 #define QUAKE_MAP_H
 
-#include "Object.h"
 #include <time.h>
 #include <cstdlib>
 
-class Map : public Object {
+class Map {
 private:
     const int horizontalSize;
     const int verticalSize;

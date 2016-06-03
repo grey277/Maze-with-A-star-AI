@@ -31,6 +31,8 @@ int main() {
     //    c.write(msg);
     //}
 
+    while(true) { }
+
     c.close();
     return 0;
 }

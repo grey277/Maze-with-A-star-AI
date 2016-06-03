@@ -109,7 +109,9 @@ public:
 
     // Estimation distance from point to final point
     const int estimate(const Point destination) const {
-        return (int) (sqrt(destination.getXPos() - pos.getXPos() * destination.getXPos() - pos.getXPos() + destination.getYPos() - pos.getYPos() * destination.getYPos() - pos.getYPos()));
+        return (int) (sqrt(destination.getXPos() - pos.getXPos() * destination.getXPos()
+                           - pos.getXPos() + destination.getYPos() - pos.getYPos()
+                                                                     * destination.getYPos() - pos.getYPos()));
     }
 };
 
@@ -122,13 +124,13 @@ class FindShortestPath {
     int** directionMap; // map of directions
     const static int dir = 8; // number of directions
 
-
     const Point directions[dir];
+
 public:
-    FindShortestPath(int horizontalSize, int verticalSize, objectType** map) : horizontalSize(horizontalSize), verticalSize(verticalSize), map(map),
-                                                                         directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0), Point(-1, -1), Point(0, -1), Point(1, -1)}    {
-
-
+    FindShortestPath(int horizontalSize, int verticalSize, objectType** map)
+            : horizontalSize(horizontalSize), verticalSize(verticalSize), map(map),
+              directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0),
+                         Point(-1, -1), Point(0, -1), Point(1, -1)}    {
 
         closedNodesMap = new int*[horizontalSize];
         openNodesMap = new int*[horizontalSize];
