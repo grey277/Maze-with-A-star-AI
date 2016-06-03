@@ -11,15 +11,13 @@
 
 class Map : public Object {
 private:
-    int botPossX, botPosY, playerPosX, playerPosY;
     const int horizontalSize;
     const int verticalSize;
     objectType** map;
 
 public:
-    Map(int horizontalSize, int verticalSize, int botPossX, int botPosY, int playerPosX, int playerPosY)
-            : horizontalSize(horizontalSize), verticalSize(verticalSize),
-              botPossX(botPossX), botPosY(botPosY), playerPosX(playerPosX), playerPosY(playerPosY)  {
+    Map(int horizontalSize, int verticalSize)
+            : horizontalSize(horizontalSize), verticalSize(verticalSize) {
         map = new objectType*[horizontalSize];
         for (int k = 0; k < horizontalSize; ++k) {
             map[k] = new objectType[verticalSize];
@@ -30,12 +28,9 @@ public:
                 map[i][j] = NOTHING;
             }
         }
-
-        map[botPossX][botPosY] = ENEMY;
-        map[playerPosX][playerPosY] = PLAYER;
     }
 
-    objectType operator(int x, int y) {
+    objectType operator()(int x, int y) {
             return map[x][y];
     }
 
@@ -60,8 +55,6 @@ public:
                     map[i][j] = WALL;
             }
         }
-        map[botPossX][botPosY] = ENEMY;
-        map[playerPosX][playerPosY] = PLAYER;
     }
 
     void generate() { // updating map, can make new item or nothing

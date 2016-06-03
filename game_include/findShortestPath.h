@@ -10,9 +10,12 @@
 #include <queue>
 #include <cmath>
 
-#include "Game.h"
 
 using namespace std;
+
+enum objectType {
+    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
+};
 
 class Point {
     int xPos;
@@ -110,7 +113,7 @@ public:
     }
 };
 
-class FindShortestPath : Object{
+class FindShortestPath {
     const int horizontalSize;
     const int verticalSize;
     objectType** map;

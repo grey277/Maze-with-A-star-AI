@@ -7,23 +7,24 @@
 
 #include "findShortestPath.h"
 #include "Map.h"
+#include "Player.h"
+#include "../client_src/client.h"
 
 using namespace std;
 
 class Game : public Object {
 public:
-    Game() : _map(30, 30, 20, 20, 1, 1) { }
+    Game(client* client) : _map(30, 30), _client(client) { }
 
-    void move(Player* p, char direction) {
-        switch(direction) {
-            case 'a': if(_map((p->x - 1), p->y)) break;
-            default: break;
-        }
+    void addPlayer() {
+        _players.push_back(new Player(30, 30, _client));
     }
 
     Map getMap() { return _map; }
 
 private:
     Map _map;
+    vector<Player*> _players;
+    client* _client;
 };
 #endif //QUAKEWITHSOCKETS_GAME_H

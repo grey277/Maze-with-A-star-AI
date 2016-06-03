@@ -10,8 +10,6 @@ using namespace std;
 #include <thread>
 
 #include "server.h"
-#include "../game_src/findShortestPath.h"
-
 
 void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {
     server server(*io_service, tcp::endpoint(tcp::v4(), 4009));

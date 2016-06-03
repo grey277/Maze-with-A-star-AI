@@ -11,10 +11,6 @@ protected:
     int y;
 
 public:
-    enum objectType {
-        WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
-    };
-
 
     Object(int x, int y) : x(x), y(y) { }
 
