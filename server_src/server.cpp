@@ -10,7 +10,7 @@ using namespace std;
 #include <thread>
 
 #include "server.h"
-#include "findShortestPath.h"
+#include "../game_src/findShortestPath.h"
 
 
 void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {

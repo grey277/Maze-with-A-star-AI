@@ -12,7 +12,7 @@
 #include <boost/asio.hpp>
 
 #include <iostream>
-#include "message.h"
+#include "../include/message.h"
 
 class participant
 {

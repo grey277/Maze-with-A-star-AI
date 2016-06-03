@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.5)
-project(quakeWithSockets)
+cmake_minimum_required(VERSION 2.6)
+project(Quake)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -Wall -pedantic")
 find_package(Boost 1.54 COMPONENTS system thread REQUIRED)
 
-set(SOURCE_FILES server.cpp server.h message.h session.h findShortestPath.h Game.h)
-add_executable(server ${SOURCE_FILES})
-add_executable(client client.cpp client.h message.h Game.h)
-target_link_libraries(server ${Boost_LIBRARIES})
-target_link_libraries(client ${Boost_LIBRARIES})
+add_subdirectory(client_src)
+add_subdirectory(game_src)
+add_subdirectory(include)
+add_subdirectory(server_src)
+

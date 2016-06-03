@@ -6,7 +6,7 @@
 #define QUAKEWITHSOCKETS_SESSION_H
 
 #include <boost/enable_shared_from_this.hpp>
-#include "message.h"
+#include "../include/message.h"
 
 using boost::asio::ip::tcp;
 

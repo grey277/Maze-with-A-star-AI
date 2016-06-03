@@ -10,7 +10,7 @@
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 
-#include "message.h"
+#include "../include/message.h"
 
 using boost::asio::ip::tcp;
 

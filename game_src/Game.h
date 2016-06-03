@@ -14,13 +14,13 @@
 using namespace std;
 
 class Object {
-private:
+public:
     int x;
     int y;
 
 public:
-    enum type { //todo
-        WALL = 0, PLAYER = 1, ENEMY = 2, BOT = 3, NOTHING = 4, ITEM = 5, ROUTE = 6
+    enum objectType { //todo
+        WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
     };
 
 
@@ -30,22 +30,24 @@ public:
 
     friend class Map;
     friend class FindShortestPath;
+    friend class Player;
 
 };
 
 class Map : public Object {
 private:
-    int xStart, yStart, xFinish, yFinish;
+    int botPossX, botPosY, playerPosX, playerPosY;
     const int horizontalSize;
     const int verticalSize;
-    type** map;
+    objectType** map;
 
 public:
-    Map(int horizontalSize, int verticalSize, int xStart, int yStart, int xFinish, int yFinish) : horizontalSize(horizontalSize), verticalSize(verticalSize),
-                                                                                                  xStart(xStart), yStart(yStart), xFinish(xFinish), yFinish(yFinish)  {
-        map = new type*[horizontalSize];
+    Map(int horizontalSize, int verticalSize, int botPossX, int botPosY, int playerPosX, int playerPosY)
+            : horizontalSize(horizontalSize), verticalSize(verticalSize),
+              botPossX(botPossX), botPosY(botPosY), playerPosX(playerPosX), playerPosY(playerPosY)  {
+        map = new objectType*[horizontalSize];
         for (int k = 0; k < horizontalSize; ++k) {
-            map[k] = new type[verticalSize];
+            map[k] = new objectType[verticalSize];
         }
 
         for (int i = 0; i < horizontalSize; i++) {
@@ -54,8 +56,8 @@ public:
             }
         }
 
-        map[xStart][yStart] = BOT;
-        map[xFinish][yFinish] = PLAYER;
+        map[botPossX][botPosY] = ENEMY;
+        map[playerPosX][playerPosY] = PLAYER;
     }
 
     void makeMap(){
@@ -79,8 +81,8 @@ public:
                     map[i][j] = WALL;
             }
         }
-        map[xStart][yStart] = BOT;
-        map[xFinish][yFinish] = PLAYER;
+        map[botPossX][botPosY] = ENEMY;
+        map[playerPosX][playerPosY] = PLAYER;
     }
 
     void generate() { // updating map, can make new item or nothing
@@ -99,8 +101,30 @@ public:
 
     }
 
-    type** getMap(){
+    objectType** getMap(){
         return map;
+    }
+};
+
+class Game : public Object {
+
+};
+
+class Player : public Object {
+public:
+    Player(int startX, int startY) {
+        x = startX;
+        y = startY;
+    }
+
+    void startThread() {
+        std::thread t([this]() { this->startLisening(); });
+    }
+
+    void startLisening() {
+        while(true) {
+
+        }
     }
 };
 

@@ -113,7 +113,7 @@ public:
 class FindShortestPath : Object{
     const int horizontalSize;
     const int verticalSize;
-    type** map;
+    objectType** map;
     int** closedNodesMap; // map of visited Nodes
     int** openNodesMap; // map of not visited Nodes
     int** directionMap; // map of directions
@@ -122,7 +122,7 @@ class FindShortestPath : Object{
 
     const Point directions[dir];
 public:
-    FindShortestPath(int horizontalSize, int verticalSize, type** map) : horizontalSize(horizontalSize), verticalSize(verticalSize), map(map),
+    FindShortestPath(int horizontalSize, int verticalSize, objectType** map) : horizontalSize(horizontalSize), verticalSize(verticalSize), map(map),
                                                                          directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0), Point(-1, -1), Point(0, -1), Point(1, -1)}    {
 
 
@@ -247,10 +247,10 @@ public:
                     case PLAYER:
                         cout << "F"; //finish
                         break;
+                    //case ENEMY:
+                    //    __throw_domain_error("cannot resolve symbol"); // todo
+                    //    break;
                     case ENEMY:
-                        __throw_domain_error("cannot resolve symbol"); // todo
-                        break;
-                    case BOT:
                         cout << "S"; //start
                         break;
                     case NOTHING:
@@ -274,7 +274,7 @@ public:
         char c;
         int x = start.getXPos();
         int y = start.getYPos();
-        map[x][y] = BOT;
+        map[x][y] = ENEMY;
         for (unsigned int i = 0; i < route.length(); i++) {
             c = route.at(i);
             x = x + directions[atoi(&c)].getXPos();
