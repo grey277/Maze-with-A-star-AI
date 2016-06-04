@@ -8,6 +8,10 @@
 #include <time.h>
 #include <cstdlib>
 
+enum objectType {
+    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
+};
+
 class Map {
 private:
     const int horizontalSize;
@@ -28,6 +32,10 @@ public:
             }
         }
         makeMap();
+    }
+
+    char* toCharStr() {
+
     }
 
     int getHorizontalSize(){ return horizontalSize; }
@@ -52,7 +60,7 @@ public:
         map[x][y] = PLAYER;
     }
 
-    objectType operator()(int x, int y) {
+    const objectType operator()(const int x, const int y) const {
             return map[x][y];
     }
 

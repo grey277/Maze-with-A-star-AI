@@ -10,12 +10,11 @@
 #include <queue>
 #include <cmath>
 
+#include "Map.h"
+
 
 using namespace std;
 
-enum objectType {
-    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
-};
 
 class Point {
     int xPos;
@@ -116,9 +115,7 @@ public:
 };
 
 class FindShortestPath {
-    const int horizontalSize;
-    const int verticalSize;
-    objectType** map;
+    Map* _map;
     int** closedNodesMap; // map of visited Nodes
     int** openNodesMap; // map of not visited Nodes
     int** directionMap; // map of directions
@@ -127,27 +124,30 @@ class FindShortestPath {
     const Point directions[dir];
 
 public:
-    FindShortestPath(int horizontalSize, int verticalSize, objectType** map)
-            : horizontalSize(horizontalSize), verticalSize(verticalSize), map(map),
-              directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0),
+    FindShortestPath(Map* map)
+            : _map(map), directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0),
                          Point(-1, -1), Point(0, -1), Point(1, -1)}    {
 
-        closedNodesMap = new int*[horizontalSize];
-        openNodesMap = new int*[horizontalSize];
-        directionMap = new int*[horizontalSize];
+        closedNodesMap = new int*[_map->getHorizontalSize()];
+        openNodesMap = new int*[_map->getHorizontalSize()];
+        directionMap = new int*[_map->getHorizontalSize()];
 
-        for(int i = 0; i < horizontalSize; i++){
-            closedNodesMap[i] = new int[verticalSize];
-            openNodesMap[i] = new int[verticalSize];
-            directionMap[i] = new int[verticalSize];
+        for(int i = 0; i < _map->getHorizontalSize(); i++){
+            closedNodesMap[i] = new int[_map->getVerticalSize()];
+            openNodesMap[i] = new int[_map->getVerticalSize()];
+            directionMap[i] = new int[_map->getVerticalSize()];
         }
 
-        for (int y = 0; y < verticalSize; y++) {
-            for (int x = 0; x < horizontalSize; x++) {
+        for (int y = 0; y < _map->getVerticalSize(); y++) {
+            for (int x = 0; x < _map->getHorizontalSize(); x++) {
                 closedNodesMap[x][y] = 0;
                 openNodesMap[x][y] = 0;
             }
         }
+    }
+    
+    void setMap(Map* map) {
+        _map = map;
     }
 
     string pathFind(const Point start, const Point finish) {
@@ -156,8 +156,8 @@ public:
         static int x, y;
         static char c;
 
-        for (y = 0; y < verticalSize; y++) {
-            for (x = 0; x < horizontalSize; x++) {
+        for (y = 0; y < _map->getVerticalSize(); y++) {
+            for (x = 0; x < _map->getHorizontalSize(); x++) {
                 closedNodesMap[x][y] = 0;
                 openNodesMap[x][y] = 0;
             }
@@ -196,9 +196,9 @@ public:
                 Point nextDirection(x + directions[currentDirection].getXPos(),
                                     y + directions[currentDirection].getYPos());
 
-                if (nextDirection.getXPos() >= 0 && nextDirection.getXPos() <= horizontalSize - 1
-                    && nextDirection.getYPos() >= 0 && nextDirection.getYPos() <= verticalSize - 1
-                    && map[nextDirection.getXPos()][nextDirection.getYPos()] != WALL
+                if (nextDirection.getXPos() >= 0 && nextDirection.getXPos() <= _map->getHorizontalSize() - 1
+                    && nextDirection.getYPos() >= 0 && nextDirection.getYPos() <= _map->getVerticalSize() - 1
+                    && _map->operator()(nextDirection.getXPos(),nextDirection.getYPos()) != WALL //TODO, check operator()
                     && closedNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] != 1) {
 
                     Node m0(nextDirection, n0.getTraveled(), n0.getPriority());
@@ -242,25 +242,25 @@ public:
     }
 
 
-    void makeTable(string route, Point start) {
-        char c;
-        int x = start.getXPos();
-        int y = start.getYPos();
-        map[x][y] = ENEMY;
-        for (unsigned int i = 0; i < route.length(); i++) {
-            c = route.at(i);
-            x = x + directions[atoi(&c)].getXPos();
-            y = y + directions[atoi(&c)].getYPos();
-            map[x][y] = ROUTE;
-        }
-        map[x][y] = PLAYER;
-    }
+    //void makeTable(string route, Point start) {
+    //    char c;
+    //    int x = start.getXPos();
+    //    int y = start.getYPos();
+    //    map[x][y] = ENEMY;
+    //    for (unsigned int i = 0; i < route.length(); i++) {
+    //        c = route.at(i);
+    //        x = x + directions[atoi(&c)].getXPos();
+    //        y = y + directions[atoi(&c)].getYPos();
+    //        map[x][y] = ROUTE;
+    //    }
+    //    map[x][y] = PLAYER;
+    //}
 
-    void printMapInfo(Point start, Point finish) {
-        cout << "Map Size (x,y): " << horizontalSize << "," << verticalSize << endl;
-        cout << "Start: " << start << endl;
-        cout << "Finish: " << finish << endl;
-    }
+    //void printMapInfo(Point start, Point finish) {
+    //    cout << "Map Size (x,y): " << _map->getHorizontalSize() << "," << _map->getVerticalSize() << endl;
+    //    cout << "Start: " << start << endl;
+    //    cout << "Finish: " << finish << endl;
+    //}
 
 
 
@@ -277,12 +277,12 @@ public:
  ***********************************************************************************************************************
 
     Point start(1, 1), finish(6, 8);
-    int horizontalSize = 15, verticalSize = 10;
+    int _map->getHorizontalSize() = 15, _map->getVerticalSize() = 10;
 
-    Map map(horizontalSize, verticalSize, 1, 1, 6, 8);
+    Map map(_map->getHorizontalSize(), _map->getVerticalSize(), 1, 1, 6, 8);
     map.makeMap();
 
-    FindShortestPath find (horizontalSize, verticalSize, map.getMap());
+    FindShortestPath find (_map->getHorizontalSize(), _map->getVerticalSize(), map.getMap());
 
     find.printMapInfo(start, finish);
 

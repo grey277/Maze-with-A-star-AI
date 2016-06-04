@@ -10,6 +10,7 @@ using namespace std;
 #include <thread>
 
 #include "server.h"
+#include "../game_include/Game.h"
 
 void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {
     server server(*io_service, tcp::endpoint(tcp::v4(), 4009));
@@ -24,6 +25,7 @@ int main() {
         boost::shared_ptr<boost::asio::io_service::work> work(new boost::asio::io_service::work( *io_service ));
         boost::thread_group threads;
         threads.create_thread(boost::bind(&startServer, io_service));
+
 
         threads.join_all();
 
