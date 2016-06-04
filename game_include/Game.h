@@ -19,7 +19,7 @@ public:
     }
 
     void addPlayer() {
-        _players.push_back(new Player(0, 0, _client, &_map, &_renderer));
+        _players.push_back(new Player(1, 1, _client, &_map, &_renderer));
     }
 
     Map getMap() { return _map; }

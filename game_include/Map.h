@@ -27,6 +27,7 @@ public:
                 map[i][j] = NOTHING;
             }
         }
+        makeMap();
     }
 
     int getHorizontalSize(){ return horizontalSize; }
@@ -34,12 +35,17 @@ public:
     int getVerticalSize() { return verticalSize; }
 
     bool canMove(int x, int y) {
-        return true;
+        return !(x < 0 || x >= horizontalSize || y < 0 || y >= verticalSize || map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY );
     }
 
     void setPlayerPosition(int x, int y) {
         map[x][y] = PLAYER;
     }
+
+    void setBotPosition(int x, int y) {
+        map[x][y] = ENEMY;
+    }
+
 
     void updatePlayerPosition(int oldX, int oldY, int x, int y) {
         map[oldX][oldY] = NOTHING;
@@ -56,6 +62,14 @@ public:
         }
         for (int y = 1 + verticalSize / 8; y < verticalSize * 7 / 8; y++) {
             map[horizontalSize / 2][y] = WALL;
+        }
+
+        for(int x = 0; x < horizontalSize; x++){
+            map[x][0] = map[x][verticalSize - 1] = WALL;
+        }
+
+        for(int y = 0; y < verticalSize; y++){
+            map[0][y] = map[horizontalSize - 1][y] = WALL;
         }
     }
 
