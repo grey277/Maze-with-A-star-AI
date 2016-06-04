@@ -17,9 +17,10 @@ int main() {
     //threads.create_thread(boost::bind(&startClient, io_service_client));
     tcp::resolver resolver(*io_service_client);
     auto endpoint_iterator = resolver.resolve({"localhost", "4009"});
-    client c(*io_service_client, endpoint_iterator);
+    Map m(30, 30);
+    client c(*io_service_client, endpoint_iterator, &m);
     std::thread t([&io_service_client](){ io_service_client->run(); });
-    Game game(&c);
+    Game game(&c, &m);
     game.addPlayer();
     //char line[message::max_body_length + 1];
     //while (std::cin.getline(line, message::max_body_length + 1))

@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "../include/message.h"
+#include "../game_include/Map.h"
 
 using boost::asio::ip::tcp;
 
@@ -19,7 +20,7 @@ typedef std::deque<message> message_queue;
 class client {
 public:
     client(boost::asio::io_service& io_service,
-    tcp::resolver::iterator endpoint_iterator) : io_service_(io_service), socket_(io_service) {
+    tcp::resolver::iterator endpoint_iterator, Map *map) : io_service_(io_service), socket_(io_service), _map(map) {
         connect(endpoint_iterator);
     }
 
@@ -83,6 +84,7 @@ private:
                                     {
                                         //std::cout.write(read_msg_.body(), read_msg_.body_length());
                                         //std::cout << "\n";
+                                        _map->changeMap(read_msg_.body(), read_msg_.body_length());
                                         do_read_header();
                                     }
                                     else
@@ -121,6 +123,7 @@ private:
     tcp::socket socket_;
     message read_msg_;
     message_queue write_msgs_;
+    Map *_map;
 };
 
 #endif //QUAKEWITHSOCKETS_CLIENT_H

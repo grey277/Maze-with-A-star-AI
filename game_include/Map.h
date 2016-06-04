@@ -42,14 +42,14 @@ public:
         std::string m = "";
         for (int i = 0; i < horizontalSize; ++i) {
             for (int j = 0; j < verticalSize; ++j) {
-                m += (char)((int)map[i][j]);
+                m += (char)((int)map[i][j] + 48);
             }
         }
         return m.c_str();
     }
 
-    void changeMap(const char* m, int size){
-        int pos = 0;
+    void changeMap(const char* m, size_t size){
+        unsigned int pos = 0;
         int x = 0, y = 0;
         while(pos < size) {
             char tmp = *(m + pos);

@@ -15,17 +15,17 @@ using namespace std;
 
 class Game : public Object {
 public:
-    Game(client* client) : _map(30, 30), _client(client) {
+    Game(client* client, Map *map) : _map(map), _client(client) {
     }
 
     void addPlayer() {
-        _players.push_back(new Player(1, 1, _client, &_map, &_renderer));
+        _players.push_back(new Player(1, 1, _client, _map, &_renderer));
     }
 
-    Map getMap() { return _map; }
+    Map* getMap() { return _map; }
 
 private:
-    Map _map;
+    Map *_map;
     vector<Player*> _players;
     client* _client;
     Renderer _renderer;

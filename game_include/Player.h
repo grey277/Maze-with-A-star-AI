@@ -99,9 +99,8 @@ public:
                 }
                 if(send) {
                     message msg;
-                    string m = to_string(x) + "," + to_string(y);
-                    msg.body_length(std::strlen(m.c_str()));
-                    std::memcpy(msg.body(), m.c_str(), msg.body_length());
+                    msg.body_length(std::strlen(_map->toCharStr()));
+                    std::memcpy(msg.body(), _map->toCharStr(), msg.body_length());
                     msg.encode_header();
                     _client->write(msg);
                     _renderer->render(_map);
