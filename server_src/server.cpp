@@ -10,10 +10,10 @@ using namespace std;
 #include <thread>
 
 #include "server.h"
-#include "../game_include/Game.h"
+#include "Bot.h"
 
 void startServer(boost::shared_ptr<boost::asio::io_service> io_service) {
-    server server(*io_service, tcp::endpoint(tcp::v4(), 4009));
+
     io_service->run();
 }
 
@@ -22,12 +22,14 @@ int main() {
     try
     {
         boost::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
-        boost::shared_ptr<boost::asio::io_service::work> work(new boost::asio::io_service::work( *io_service ));
-        boost::thread_group threads;
-        threads.create_thread(boost::bind(&startServer, io_service));
+        //boost::shared_ptr<boost::asio::io_service::work> work(new boost::asio::io_service::work( *io_service ));
+        //boost::thread_group threads;
+        //threads.create_thread(boost::bind(&startServer, io_service));
+        server server(*io_service, tcp::endpoint(tcp::v4(), 4009));
+        std::thread t([&io_service](){ io_service->run(); });
+        Bot b(20, 20, &server, new Map(30, 30));
 
-
-        threads.join_all();
+        //threads.join_all();
 
     }
     catch (std::exception& e)

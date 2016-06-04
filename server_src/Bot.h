@@ -8,13 +8,14 @@
 #include "../game_include/findShortestPath.h"
 #include "../game_include/Map.h"
 #include "server.h"
+#include "../game_include/Object.h"
 
 class Bot : protected Object {
 private:
     server *_server;
     Map *_map;
 public:
-    Bot(int startX, int startY, server *server, Map *map) : _server(server), _map(map), _renderer(renderer) {
+    Bot(int startX, int startY, server *server, Map *map) : _server(server), _map(map) {
         x = startX;
         y = startY;
         _map->setBotPosition(x, y);
@@ -23,10 +24,10 @@ public:
 
     void startThread() {
         if(_server->getRoom()->isRecent()) {
-            _map(_server->getRoom()->returnLastMessage());
+            _map->changeMap(_server->getRoom()->returnLastMessage().body(), _server->getRoom()->returnLastMessage().body_length());
         }
         FindShortestPath f(_map);
-        Point p = f.pathFind(new Point(startX, startY), new Point(_map->getPlayerX(), _map->getPlayerY()));
+        Point p = f.pathFind(Point(x, y), Point(_map->getPlayerX(), _map->getPlayerY()));
         if(_map->canMove(p.getXPos(), p.getYPos())) {
             _map->updateBotPosition(x, y, p.getXPos(), p.getYPos());
             x = p.getXPos();

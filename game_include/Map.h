@@ -38,43 +38,36 @@ public:
         makeMap();
     }
 
-    char* toCharStr() {
+    const char* toCharStr() {
         std::string m = "";
         for (int i = 0; i < horizontalSize; ++i) {
             for (int j = 0; j < verticalSize; ++j) {
                 m += (char)((int)map[i][j]);
             }
         }
-        return const_cast<char*>(m.c_str());
+        return m.c_str();
     }
 
-    objectType** toObjectTypeArray(char* m){
+    void changeMap(const char* m, int size){
         int pos = 0;
-        for (int y = 0; y < mapPointer->getVerticalSize(); y++) {
-            for (int x = 0; x < mapPointer->getHorizontalSize(); x++) {
-                switch(m[pos]){
-                    case WALL:
-                        mvaddch(y,x,'O');
-                        break;
-                    case PLAYER:
-                        mvaddch(y,x,'F');
-                        break;
-                        //case ENEMY:
-                        //    __throw_domain_error("cannot resolve symbol"); // todo
-                        //    break;
-                    case ENEMY:
-                        mvaddch(y,x,'S');
-                        break;
-                    case NOTHING:
-                        mvaddch(y,x,'.');
-                        break;
-                    case ITEM:
-                        mvaddch(y,x,'I');
-                        break;
-                    default:
-                        __throw_domain_error("cannot resolve symbol");
-                }
-                pos++;
+        int x = 0, y = 0;
+        while(pos < size) {
+            char tmp = *(m + pos);
+            switch(tmp) {
+                case '0': map[x][y] = WALL; break;
+                case '1': map[x][y] = PLAYER; break;
+                case '2': map[x][y] = ENEMY; break;
+                case '4': map[x][y] = NOTHING; break;
+                case '5': map[x][y] = ITEM; break;
+                case '6': map[x][y] = ROUTE; break;
+                default:
+                    break;
+            }
+            pos++;
+            x++;
+            if(x >= horizontalSize) {
+                y++;
+                x = 0;
             }
         }
     }
