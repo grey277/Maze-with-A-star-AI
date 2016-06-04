@@ -8,6 +8,8 @@
 #include <time.h>
 #include <cstdlib>
 
+#include <string.h>
+
 enum objectType {
     WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
 };
@@ -37,7 +39,44 @@ public:
     }
 
     char* toCharStr() {
+        std::string m = "";
+        for (int i = 0; i < horizontalSize; ++i) {
+            for (int j = 0; j < verticalSize; ++j) {
+                m += (char)((int)map[i][j]);
+            }
+        }
+        return const_cast<char*>(m.c_str());
+    }
 
+    objectType** toObjectTypeArray(char* m){
+        int pos = 0;
+        for (int y = 0; y < mapPointer->getVerticalSize(); y++) {
+            for (int x = 0; x < mapPointer->getHorizontalSize(); x++) {
+                switch(m[pos]){
+                    case WALL:
+                        mvaddch(y,x,'O');
+                        break;
+                    case PLAYER:
+                        mvaddch(y,x,'F');
+                        break;
+                        //case ENEMY:
+                        //    __throw_domain_error("cannot resolve symbol"); // todo
+                        //    break;
+                    case ENEMY:
+                        mvaddch(y,x,'S');
+                        break;
+                    case NOTHING:
+                        mvaddch(y,x,'.');
+                        break;
+                    case ITEM:
+                        mvaddch(y,x,'I');
+                        break;
+                    default:
+                        __throw_domain_error("cannot resolve symbol");
+                }
+                pos++;
+            }
+        }
     }
 
     int getHorizontalSize(){ return horizontalSize; }

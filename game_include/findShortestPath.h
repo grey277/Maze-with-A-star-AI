@@ -187,7 +187,7 @@ public:
                     path = c + path;
                     x += directions[currentDirection].getXPos();
                     y += directions[currentDirection].getYPos();
-                    return new Point(x, y);
+                    return Point(x, y);
                 }
             }
 
