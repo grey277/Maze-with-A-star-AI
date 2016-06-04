@@ -37,6 +37,14 @@ public:
             participant->deliver(msg);
     }
 
+    message returnLastMessage() {
+        return recent_msgs_.front();
+    }
+
+    bool isRecent() {
+        return !recent_msgs_.empty();
+    }
+
 private:
     std::set<participant_ptr> participants_;
     enum { max_recent_msgs = 1 };

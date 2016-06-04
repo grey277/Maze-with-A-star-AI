@@ -62,6 +62,11 @@ public:
         map[x][y] = ENEMY;
     }
 
+    void updateBotPosition(int oldX, int oldY, int x, int y) {
+        map[oldX][oldY] = NOTHING;
+        map[x][y] = ENEMY;
+    }
+
     void updatePlayerPosition(int oldX, int oldY, int x, int y) {
         map[oldX][oldY] = NOTHING;
         map[x][y] = PLAYER;

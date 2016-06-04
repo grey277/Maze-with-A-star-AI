@@ -34,6 +34,10 @@ public:
               socket_(io_service) {
         acc();
     }
+
+    room* getRoom() {
+        return &room_;
+    }
 private:
     tcp::acceptor acceptor_;
     tcp::socket socket_;
