@@ -29,8 +29,15 @@ public:
     }
 
     void startThread() {
-        while(true) {
+        WINDOW *w = initscr();
+        raw();
+        cbreak();
+        noecho();
+        nodelay(w, TRUE);
+        keypad(stdscr, TRUE);
+        curs_set(0);
 
+        while(true) {
             char ch;
             ch = getch();
             if(ch > 0) {

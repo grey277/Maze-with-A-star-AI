@@ -150,11 +150,11 @@ public:
         _map = map;
     }
 
-    string pathFind(const Point start, const Point finish) {
-        static priority_queue<Node> queue[2]; // list of not visited Nodes
-        static int queueIndex = 0;
-        static int x, y;
-        static char c;
+    Point pathFind(const Point start, const Point finish) {
+        priority_queue<Node> queue[2]; // list of not visited Nodes
+        int queueIndex = 0;
+        int x = 0, y = 0;
+        char c;
 
         for (y = 0; y < _map->getVerticalSize(); y++) {
             for (x = 0; x < _map->getHorizontalSize(); x++) {
@@ -187,8 +187,8 @@ public:
                     path = c + path;
                     x += directions[currentDirection].getXPos();
                     y += directions[currentDirection].getYPos();
+                    return new Point(x, y);
                 }
-                return path;
             }
 
             // make moves in all directions
@@ -238,7 +238,7 @@ public:
                 }
             }
         }
-        return ""; // no route found
+        return start; // no route found
     }
 
 

@@ -39,6 +39,7 @@ public:
     }
 
     void render(Map* map){
+
         printTable(map);
         refresh();
     }

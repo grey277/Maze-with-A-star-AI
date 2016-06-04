@@ -18,7 +18,7 @@ public:
     void join(participant_ptr participant)
     {
         participants_.insert(participant);
-        for (auto msg: recent_msgs_)
+        for (auto msg : recent_msgs_)
             participant->deliver(msg);
     }
 
@@ -39,7 +39,7 @@ public:
 
 private:
     std::set<participant_ptr> participants_;
-    enum { max_recent_msgs = 100 };
+    enum { max_recent_msgs = 1 };
     message_queue recent_msgs_;
 };
 

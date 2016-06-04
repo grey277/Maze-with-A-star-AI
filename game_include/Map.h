@@ -18,9 +18,11 @@ private:
     const int verticalSize;
     objectType** map;
 
+    int playerX, playerY;
+
 public:
     Map(int horizontalSize, int verticalSize)
-            : horizontalSize(horizontalSize), verticalSize(verticalSize) {
+            : horizontalSize(horizontalSize), verticalSize(verticalSize), playerX(1), playerY(1) {
         map = new objectType*[horizontalSize];
         for (int k = 0; k < horizontalSize; ++k) {
             map[k] = new objectType[verticalSize];
@@ -42,22 +44,29 @@ public:
 
     int getVerticalSize() { return verticalSize; }
 
+    int getPlayerX() { return playerX; }
+
+    int getPlayerY() { return playerY; }
+
     bool canMove(int x, int y) {
         return !(x < 0 || x >= horizontalSize || y < 0 || y >= verticalSize || map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY );
     }
 
     void setPlayerPosition(int x, int y) {
         map[x][y] = PLAYER;
+        playerX= x;
+        playerY = y;
     }
 
     void setBotPosition(int x, int y) {
         map[x][y] = ENEMY;
     }
 
-
     void updatePlayerPosition(int oldX, int oldY, int x, int y) {
         map[oldX][oldY] = NOTHING;
         map[x][y] = PLAYER;
+        playerX = x;
+        playerY = y;
     }
 
     const objectType operator()(const int x, const int y) const {

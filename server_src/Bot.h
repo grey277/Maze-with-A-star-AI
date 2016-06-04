@@ -6,15 +6,15 @@
 #define QUAKE_BOT_H
 
 #include "../game_include/findShortestPath.h"
+#include "../game_include/Map.h"
+#include "server.h"
 
 class Bot : protected Object {
 private:
     server *_server;
     Map *_map;
-    Renderer *_renderer;
 public:
-    Bot(int startX, int startY, client *client, Map *map, Renderer *renderer) : _client(client), _map(map),
-                                                                                _renderer(renderer) {
+    Bot(int startX, int startY, server *server, Map *map) : _server(server), _map(map), _renderer(renderer) {
         x = startX;
         y = startY;
         _map->setBotPosition(x, y);
@@ -22,7 +22,8 @@ public:
     }
 
     void startThread() {
-
+        FindShortestPath f(_map);
+        Point p = f.pathFind(new Point(startX, startY), new Point(_map->getPlayerX(), _map->getPlayerY()));
     }
 
     int getX() { return x; }
