@@ -5,6 +5,8 @@
 #ifndef QUAKEWITHSOCKETS_SESSION_H
 #define QUAKEWITHSOCKETS_SESSION_H
 
+#include <exception>
+
 #include <boost/enable_shared_from_this.hpp>
 #include "../include/message.h"
 #include "../game_include/Map.h"
@@ -36,12 +38,16 @@ public:
             std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
             std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
             std::string newY = s.substr(s.find_last_of(",") + 1, msg.body_length() - s.find_last_of(",") - 1);
-            _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-            message msgToSend;
-            msgToSend.body_length(std::strlen(_map->toCharStr()));
-            std::memcpy(msgToSend.body(), _map->toCharStr(), msgToSend.body_length());
-            msgToSend.encode_header();
-            deliver(msgToSend);
+            try {
+                _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+                message msgToSend;
+                msgToSend.body_length(std::strlen(_map->toCharStr()));
+                std::memcpy(msgToSend.body(), _map->toCharStr(), msgToSend.body_length());
+                msgToSend.encode_header();
+                deliver(msgToSend);
+            } catch(exception &e) {
+
+            }
         } else {
             recent_msgs_.push_back(msg);
             while (recent_msgs_.size() > max_recent_msgs)

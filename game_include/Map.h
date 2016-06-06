@@ -12,7 +12,7 @@
 #include <mutex>
 
 enum objectType {
-    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
+    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6, SHOOT = 7
 };
 
 class Map {
@@ -82,6 +82,7 @@ public:
                     case '4': map[x][y] = NOTHING; break;
                     case '5': map[x][y] = ITEM; break;
                     case '6': map[x][y] = ROUTE; break;
+                    case '7': map[x][y] = SHOOT; break;
                     default: break;
                 }
                 pos++;
@@ -103,7 +104,16 @@ public:
 
     bool canMove(int x, int y) {
         LockMutex lock;
-        return !(x < 0 || x >= horizontalSize || y < 0 || y >= verticalSize || map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY );
+        return !(x < 0 || x >= horizontalSize || y < 0 || y >= verticalSize
+                 || map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY );
+    }
+
+    void addBullet(int x, int y) {
+        map[x][y] = SHOOT;
+    }
+
+    bool stopBullet(int x, int y) {
+        return map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY;
     }
 
     bool canShoot(int botPosX, int botPosY, int playerPosX, int playerPosY){

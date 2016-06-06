@@ -87,7 +87,10 @@ private:
                                             _map->changeMap(read_msg_.body(), read_msg_.body_length());
                                             _renderer->render(_map);
                                             do_read_header();
-                                        }
+                                        }//else if (read_msg_.body()[0] == 's') {
+                                         //  std::string s(read_msg_.body());
+                                         //  _map->addBullet(std::stoi(s.substr(s.find_first_of('t') + 1, s.find_first_of(',') - 1)), std::stoi(s.substr(s.find_first_of(',') + 1, s.length() - s.find_first_of(',') - 1)));
+                                        //}
                                     }
                                     else
                                     {

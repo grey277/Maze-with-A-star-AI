@@ -42,6 +42,9 @@ public:
                     case ITEM:
                         mvaddch(y,x,'I');
                         break;
+                    case SHOOT:
+                        mvaddch(y,x,'-');
+                        break;
                     default:
                         throw std::invalid_argument("bad wolf");
                 }

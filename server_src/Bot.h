@@ -26,7 +26,7 @@ public:
         while(true) {
             auto t = std::async(&Bot::startThread, this, _map, _server);
             auto info = t.get();
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
 
     }
@@ -39,14 +39,33 @@ public:
             x = p.getXPos();
             y = p.getYPos();
         }
-        //if(_map->canShoot(x, y, p.getXPos(), p.getYPos())){
-        //    cout << "shooting " << endl;
-        //}
+        if(_map->canShoot(x, y, p.getXPos(), p.getYPos())){
+            startShoot(x, y);
+        }
         message msg;
         msg.body_length(std::strlen(_map->toCharStr()));
         std::memcpy(msg.body(), _map->toCharStr(), msg.body_length());
         msg.encode_header();
         (*_server).getRoom()->deliver(msg);
+        return true;
+    }
+
+    void startShoot(int x, int y) {
+        auto t = std::async(&Bot::shoot, this,x, y, _map, _server);
+        auto info = t.get();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    bool shoot(int x, int y, Map *_map, server *_server) {
+        while(!_map->stopBullet(x, y)) {
+            message msg;
+            std::string s = "shoot" + std::to_string(x) + "," + std::to_string(y);
+            msg.body_length(s.length());
+            std::memcpy(msg.body(), s.c_str(), msg.body_length());
+            msg.encode_header();
+            (*_server).getRoom()->deliver(msg);
+            x++;
+        }
         return true;
     }
 

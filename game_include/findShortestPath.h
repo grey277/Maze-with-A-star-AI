@@ -252,63 +252,6 @@ public:
         }
         return start; // no route found
     }
-
-
-    //void makeTable(string route, Point start) {
-    //    char c;
-    //    int x = start.getXPos();
-    //    int y = start.getYPos();
-    //    map[x][y] = ENEMY;
-    //    for (unsigned int i = 0; i < route.length(); i++) {
-    //        c = route.at(i);
-    //        x = x + directions[atoi(&c)].getXPos();
-    //        y = y + directions[atoi(&c)].getYPos();
-    //        map[x][y] = ROUTE;
-    //    }
-    //    map[x][y] = PLAYER;
-    //}
-
-    //void printMapInfo(Point start, Point finish) {
-    //    cout << "Map Size (x,y): " << _map->getHorizontalSize() << "," << _map->getVerticalSize() << endl;
-    //    cout << "Start: " << start << endl;
-    //    cout << "Finish: " << finish << endl;
-    //}
-
-
-
 };
 
-
-
-/***********************************************************************************************************************
- *
- *
- * przyklad uzycia
- *
- *
- ***********************************************************************************************************************
-
-    Point start(1, 1), finish(6, 8);
-    int _map->getHorizontalSize() = 15, _map->getVerticalSize() = 10;
-
-    Map map(_map->getHorizontalSize(), _map->getVerticalSize(), 1, 1, 6, 8);
-    map.makeMap();
-
-    FindShortestPath find (_map->getHorizontalSize(), _map->getVerticalSize(), map.getMap());
-
-    find.printMapInfo(start, finish);
-
-    string route = find.pathFind(start, finish);
-    if (route == "")
-        cout << "cannot fing route" << endl;
-    else
-        cout << "Route: " << route << endl;
-    cout << "Route length: " << route.length() << endl << endl;
-
-    if (route.length() > 0) {
-        find.makeTable(route, start);
-        find.printTable();
-    }
-
- */
 #endif //QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
