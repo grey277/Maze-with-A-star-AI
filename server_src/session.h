@@ -29,6 +29,7 @@ public:
 
     void deliver(const message& msg)
     {
+
         recent_msgs_.push_back(msg);
         while (recent_msgs_.size() > max_recent_msgs)
             recent_msgs_.pop_front();

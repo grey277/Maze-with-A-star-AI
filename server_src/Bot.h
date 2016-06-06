@@ -26,7 +26,7 @@ public:
         while(true) {
             auto t = std::async(&Bot::startThread, this, _map, _server);
             auto info = t.get();
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
 
     }
@@ -41,6 +41,9 @@ public:
             _map->updateBotPosition(x, y, p.getXPos(), p.getYPos());
             x = p.getXPos();
             y = p.getYPos();
+        }
+        if(_map->canShoot(x, y, p.getXPos(), p.getYPos())){
+            cout << "shooting " << endl;
         }
         message msg;
         msg.body_length(std::strlen(_map->toCharStr()));

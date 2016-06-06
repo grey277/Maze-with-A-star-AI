@@ -82,8 +82,8 @@ private:
                                 {
                                     if (!ec)
                                     {
-                                        //std::cout.write(read_msg_.body(), read_msg_.body_length());
-                                        //std::cout << "\n";
+//                                        std::cout.write(read_msg_.body(), read_msg_.body_length());
+//                                        std::cout << std::endl << std::endl;
                                         _map->changeMap(read_msg_.body(), read_msg_.body_length());
                                         do_read_header();
                                     }

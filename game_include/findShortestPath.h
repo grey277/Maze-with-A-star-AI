@@ -187,8 +187,13 @@ public:
                     path = c + path;
                     x += directions[currentDirection].getXPos();
                     y += directions[currentDirection].getYPos();
-                    return Point(x, y);
                 }
+                if(!path.empty()) {
+                    c = path.at(0);
+                    return Point(start.getXPos() + directions[atoi(&c)].getXPos(),
+                                 start.getYPos() + directions[atoi(&c)].getYPos());
+                }
+                return Point(start.getXPos(), start.getYPos());
             }
 
             // make moves in all directions
