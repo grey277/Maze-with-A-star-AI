@@ -13,13 +13,13 @@
 
 using namespace std;
 
-class Game : public Object {
+class Game {
 public:
     Game(client* client, Map *map) : _map(map), _client(client) {
     }
 
     void addPlayer() {
-        _players.push_back(new Player(1, 1, _client, _map, &_renderer));
+        _players.push_back(new Player(1, 1, _client, _map));
     }
 
     Map* getMap() { return _map; }
@@ -28,6 +28,5 @@ private:
     Map *_map;
     vector<Player*> _players;
     client* _client;
-    Renderer _renderer;
 };
 #endif //QUAKEWITHSOCKETS_GAME_H

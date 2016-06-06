@@ -123,23 +123,30 @@ class FindShortestPath {
 
     const Point directions[dir];
 
+    int horizontalSize;
+    int verticalSize;
+
+
 public:
     FindShortestPath(Map* map)
             : _map(map), directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0),
                          Point(-1, -1), Point(0, -1), Point(1, -1)}    {
 
-        closedNodesMap = new int*[_map->getHorizontalSize()];
-        openNodesMap = new int*[_map->getHorizontalSize()];
-        directionMap = new int*[_map->getHorizontalSize()];
+        horizontalSize = _map->getHorizontalSize();
+        verticalSize = _map->getVerticalSize();
 
-        for(int i = 0; i < _map->getHorizontalSize(); i++){
-            closedNodesMap[i] = new int[_map->getVerticalSize()];
-            openNodesMap[i] = new int[_map->getVerticalSize()];
-            directionMap[i] = new int[_map->getVerticalSize()];
+        closedNodesMap = new int*[horizontalSize];
+        openNodesMap = new int*[horizontalSize];
+        directionMap = new int*[horizontalSize];
+
+        for(int i = 0; i < horizontalSize; i++){
+            closedNodesMap[i] = new int[verticalSize];
+            openNodesMap[i] = new int[verticalSize];
+            directionMap[i] = new int[verticalSize];
         }
 
-        for (int y = 0; y < _map->getVerticalSize(); y++) {
-            for (int x = 0; x < _map->getHorizontalSize(); x++) {
+        for (int y = 0; y < verticalSize; y++) {
+            for (int x = 0; x < horizontalSize; x++) {
                 closedNodesMap[x][y] = 0;
                 openNodesMap[x][y] = 0;
             }
@@ -156,8 +163,8 @@ public:
         int x = 0, y = 0;
         char c;
 
-        for (y = 0; y < _map->getVerticalSize(); y++) {
-            for (x = 0; x < _map->getHorizontalSize(); x++) {
+        for (y = 0; y < verticalSize; y++) {
+            for (x = 0; x < horizontalSize; x++) {
                 closedNodesMap[x][y] = 0;
                 openNodesMap[x][y] = 0;
             }
@@ -201,8 +208,8 @@ public:
                 Point nextDirection(x + directions[currentDirection].getXPos(),
                                     y + directions[currentDirection].getYPos());
 
-                if (nextDirection.getXPos() >= 0 && nextDirection.getXPos() <= _map->getHorizontalSize() - 1
-                    && nextDirection.getYPos() >= 0 && nextDirection.getYPos() <= _map->getVerticalSize() - 1
+                if (nextDirection.getXPos() >= 0 && nextDirection.getXPos() <= horizontalSize - 1
+                    && nextDirection.getYPos() >= 0 && nextDirection.getYPos() <= verticalSize - 1
                     && _map->operator()(nextDirection.getXPos(),nextDirection.getYPos()) != WALL //TODO, check operator()
                     && closedNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] != 1) {
 

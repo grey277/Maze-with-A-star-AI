@@ -6,9 +6,23 @@
 #define QUAKE_RENDERER_H
 
 #include <ncurses.h>
+#include <exception>
 
 class Renderer {
 public:
+    Renderer() {
+        initscr();
+        raw();
+        cbreak();
+        noecho();
+        //nodelay(w, TRUE);
+        keypad(stdscr, TRUE);
+        curs_set(0);
+    }
+
+    ~Renderer() {
+        endwin();
+    }
     void printTable(Map* mapPointer) {
         for (int y = 0; y < mapPointer->getVerticalSize(); y++) {
             for (int x = 0; x < mapPointer->getHorizontalSize(); x++) {
@@ -19,9 +33,6 @@ public:
                     case PLAYER:
                         mvaddch(y,x,'F');
                         break;
-                        //case ENEMY:
-                        //    __throw_domain_error("cannot resolve symbol"); // todo
-                        //    break;
                     case ENEMY:
                         mvaddch(y,x,'S');
                         break;
@@ -32,14 +43,14 @@ public:
                         mvaddch(y,x,'I');
                         break;
                     default:
-                        __throw_domain_error("cannot resolve symbol");
+                        throw std::invalid_argument("bad wolf");
                 }
             }
         }
     }
 
     void render(Map* map){
-
+        clear();
         printTable(map);
         refresh();
     }

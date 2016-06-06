@@ -25,8 +25,9 @@ int main() {
         boost::shared_ptr<boost::asio::io_service::work> work(new boost::asio::io_service::work( *io_service ));
         boost::thread_group threads;
         threads.create_thread(boost::bind(&startServer, io_service));
-        server server(*io_service, tcp::endpoint(tcp::v4(), 4009));
-        Bot b(20, 20, &server, new Map(30, 30));
+        Map m(30, 30);
+        server server(*io_service, tcp::endpoint(tcp::v4(), 4009), &m);
+        Bot b(20, 20, &server, &m);
         //std::thread t([&io_service](){ io_service->run(); });
         //auto t = std::async(&boost::asio::io_service::run, *io_service);
 

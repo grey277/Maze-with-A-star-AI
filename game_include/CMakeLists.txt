@@ -1,6 +1,5 @@
 INSTALL_FILES(/game_include FILES findShortestPath.h)
 INSTALL_FILES(/game_include FILES Game.h)
 INSTALL_FILES(/game_include FILES Map.h)
-INSTALL_FILES(/game_include FILES Object.h)
 INSTALL_FILES(/game_include FILES Player.h)
 INSTALL_FILES(/game_include FILES Renderer.h)

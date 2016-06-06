@@ -9,6 +9,7 @@
 #include <cstdlib>
 
 #include <string.h>
+#include <mutex>
 
 enum objectType {
     WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6
@@ -21,6 +22,22 @@ private:
     objectType** map;
 
     int playerX, playerY;
+    static std::mutex lock;
+
+    class LockMutex
+    {
+    public:
+
+        inline LockMutex()
+        {
+            lock.lock();
+        };
+
+        inline ~LockMutex()
+        {
+            lock.unlock();
+        };
+    };
 
 public:
     Map(int horizontalSize, int verticalSize)
@@ -39,6 +56,7 @@ public:
     }
 
     const char* toCharStr() {
+        LockMutex lock;
         std::string m = "";
         for (int i = 0; i < horizontalSize; ++i) {
             for (int j = 0; j < verticalSize; ++j) {
@@ -49,6 +67,7 @@ public:
     }
 
     void changeMap(const char* m, size_t size){
+        LockMutex lock;
         std::string message(m);
         int pos = 0;
         for (int x = 0; x < horizontalSize; ++x) {
@@ -68,42 +87,27 @@ public:
                 pos++;
             }
         }
-//        unsigned int pos = 0;
-//        int x = 0, y = 0;
-//        while(pos < size) {
-//            char tmp = *(m + pos);
-//            switch(m.at(pos)) {
-//                case '0': map[x][y] = WALL; break;
-//                case '1': map[x][y] = PLAYER; break;
-//                case '2': map[x][y] = ENEMY; break;
-//                case '4': map[x][y] = NOTHING; break;
-//                case '5': map[x][y] = ITEM; break;
-//                case '6': map[x][y] = ROUTE; break;
-//                default:
-//                    break;
-//            }
-//            pos++;
-//            x++;
-//            if(x >= horizontalSize) {
-//                y++;
-//                x = 0;
-//            }
-//        }
     }
 
     int getHorizontalSize(){ return horizontalSize; }
 
     int getVerticalSize() { return verticalSize; }
 
-    int getPlayerX() { return playerX; }
+    int getPlayerX() {
+        LockMutex lock;
+        return playerX; }
 
-    int getPlayerY() { return playerY; }
+    int getPlayerY() {
+        LockMutex lock;
+        return playerY; }
 
     bool canMove(int x, int y) {
+        LockMutex lock;
         return !(x < 0 || x >= horizontalSize || y < 0 || y >= verticalSize || map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY );
     }
 
     bool canShoot(int botPosX, int botPosY, int playerPosX, int playerPosY){
+        LockMutex lock;
         if(botPosX == playerPosX) {
             if(botPosY < playerPosY) {
                 for (int y = botPosY + 1; y < playerPosY; ++y) {
@@ -140,21 +144,25 @@ public:
     }
 
     void setPlayerPosition(int x, int y) {
+        LockMutex lock;
         map[x][y] = PLAYER;
         playerX= x;
         playerY = y;
     }
 
     void setBotPosition(int x, int y) {
+        LockMutex lock;
         map[x][y] = ENEMY;
     }
 
     void updateBotPosition(int oldX, int oldY, int x, int y) {
+        LockMutex lock;
         map[oldX][oldY] = NOTHING;
         map[x][y] = ENEMY;
     }
 
     void updatePlayerPosition(int oldX, int oldY, int x, int y) {
+        LockMutex lock;
         map[oldX][oldY] = NOTHING;
         map[x][y] = PLAYER;
         playerX = x;
@@ -162,10 +170,12 @@ public:
     }
 
     const objectType operator()(const int x, const int y) const {
-            return map[x][y];
+        LockMutex lock;
+        return map[x][y];
     }
 
     void makeMap(){
+        LockMutex lock;
         for (int x = 2 + horizontalSize / 8; x < horizontalSize * 7 / 8 - 1; x++) {
             map[x][verticalSize / 2] = WALL;
         }
@@ -183,6 +193,7 @@ public:
     }
 
     void makeRandomMap() {
+        LockMutex lock;
         srand(time(NULL));
 
         for (int i = 0; i < horizontalSize; i++) {
@@ -197,6 +208,7 @@ public:
     }
 
     void generate() { // updating map, can make new item or nothing
+        LockMutex lock;
         srand(time(NULL));
         int horizontal, vertical;
         do {
@@ -213,8 +225,11 @@ public:
     }
 
     objectType** getMap(){
+        LockMutex lock;
         return map;
     }
 };
+
+std::mutex Map::lock;
 
 #endif //QUAKE_MAP_H

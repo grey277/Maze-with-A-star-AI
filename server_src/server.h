@@ -24,30 +24,32 @@ public:
 typedef std::shared_ptr<participant> participant_ptr;
 
 #include "session.h"
+#include "../game_include/Map.h"
 
 using boost::asio::ip::tcp;
 
 class server {
 public:
-    server(boost::asio::io_service& io_service, const tcp::endpoint& endpoint)
+    server(boost::asio::io_service& io_service, const tcp::endpoint& endpoint, Map *map)
             : acceptor_(io_service, endpoint),
-              socket_(io_service) {
+              socket_(io_service), _map(map), _room(_map) {
         acc();
     }
 
     room* getRoom() {
-        return &room_;
+        return &_room;
     }
 private:
     tcp::acceptor acceptor_;
     tcp::socket socket_;
-    room room_;
+    Map *_map;
+    room _room;
     void acc() {
         acceptor_.async_accept(socket_,
                                [this](boost::system::error_code ec)
                                {
                                    if(!ec) {
-                                       std::make_shared<session>(std::move(socket_), room_)->start();
+                                       std::make_shared<session>(std::move(socket_), _room)->start();
                                    }
 
                                    acc();

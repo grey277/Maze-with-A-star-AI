@@ -7,6 +7,7 @@
 
 #include <boost/enable_shared_from_this.hpp>
 #include "../include/message.h"
+#include "../game_include/Map.h"
 
 using boost::asio::ip::tcp;
 
@@ -14,7 +15,7 @@ typedef std::deque<message> message_queue;
 
 class room {
 public:
-public:
+    room(Map *map) : _map(map) { }
     void join(participant_ptr participant)
     {
         participants_.insert(participant);
@@ -29,27 +30,34 @@ public:
 
     void deliver(const message& msg)
     {
+        if(msg.body_length() < 17ul) {
+            std::string s(msg.body());
+            std::string oldX = s.substr(0, s.find_first_of(","));
+            std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
+            std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
+            std::string newY = s.substr(s.find_last_of(",") + 1, msg.body_length() - s.find_last_of(",") - 1);
+            _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+            message msgToSend;
+            msgToSend.body_length(std::strlen(_map->toCharStr()));
+            std::memcpy(msgToSend.body(), _map->toCharStr(), msgToSend.body_length());
+            msgToSend.encode_header();
+            deliver(msgToSend);
+        } else {
+            recent_msgs_.push_back(msg);
+            while (recent_msgs_.size() > max_recent_msgs)
+                recent_msgs_.pop_front();
 
-        recent_msgs_.push_back(msg);
-        while (recent_msgs_.size() > max_recent_msgs)
-            recent_msgs_.pop_front();
-
-        for (auto participant: participants_)
-            participant->deliver(msg);
+            for (auto participant: participants_)
+                participant->deliver(msg);
+        }
     }
 
-    message returnLastMessage() {
-        return recent_msgs_.front();
-    }
-
-    bool isRecent() {
-        return !recent_msgs_.empty();
-    }
 
 private:
     std::set<participant_ptr> participants_;
     enum { max_recent_msgs = 1 };
     message_queue recent_msgs_;
+    Map *_map;
 };
 
 class session : public participant, public std::enable_shared_from_this<session>{
