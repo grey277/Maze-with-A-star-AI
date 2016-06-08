@@ -34,7 +34,7 @@ public:
             if(ch > 0) {
                 bool send = false;
                 message msg;
-                std::string s = "pos";
+                std::string s = "";
                 switch(ch) {
                     case 'a': if(_map->canMove(x - 1, y)){
                             send = true;
