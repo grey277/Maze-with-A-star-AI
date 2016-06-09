@@ -39,12 +39,13 @@ public:
             x = p.getXPos();
             y = p.getYPos();
         }
-        if(_map->canShoot(x, y, p.getXPos(), p.getYPos())){
-            startShoot(x, y);
-        }
+        //if(_map->canShoot(x, y, p.getXPos(), p.getYPos())){
+        //    startShoot(x, y);
+        //}
         message msg;
         msg.body_length(std::strlen(_map->toCharStr()));
         std::memcpy(msg.body(), _map->toCharStr(), msg.body_length());
+        msg.messageType(message::type::mapm);
         msg.encode_header();
         (*_server).getRoom()->deliver(msg);
         return true;

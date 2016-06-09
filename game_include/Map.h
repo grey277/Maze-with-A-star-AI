@@ -21,7 +21,6 @@ class Map {
 private:
     const int horizontalSize;
     const int verticalSize;
-    //objectType** map;
     int **map;
     int playerX, playerY;
     static std::mutex lock;
@@ -43,28 +42,10 @@ private:
 
 public:
     Map(int horizontalSize, int verticalSize)
-            : horizontalSize(horizontalSize), verticalSize(verticalSize), playerX(1), playerY(1) {
-        //map = new objectType*[horizontalSize];
-        //for (int k = 0; k < horizontalSize; ++k) {
-        //    map[k] = new objectType[verticalSize];
-        //}
-//
-        //for (int i = 0; i < horizontalSize; i++) {
-        //    for (int j = 0; j < verticalSize; ++j) {
-        //        map[i][j] = NOTHING;
-        //    }
-        //}
+            : horizontalSize(horizontalSize), verticalSize(verticalSize), playerX(2), playerY(2) {
         MapGen gen(horizontalSize, verticalSize);
         map = gen.getMaze();
 
-        //for (int l = 0; l < 20; ++l) {
-        //    for (int i = 0; i < 50; ++i) {
-        //        std::cout << map[l][i];
-        //    }
-        //    std::cout << endl;
-        //}
-//
-        //makeMap();
     }
 
     const char* toCharStr() {

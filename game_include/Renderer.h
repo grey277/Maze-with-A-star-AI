@@ -26,38 +26,39 @@ public:
     void printTable(Map* mapPointer) {
         for (int y = 1; y < mapPointer->getVerticalSize(); y++) {
             for (int x = 1; x < mapPointer->getHorizontalSize(); x++) {
-                switch ((*mapPointer)(x,y)) {
-                    case 0:
-                        break;
-                    case 1:
-                        mvaddch(y + 5, x + 5, ACS_CKBOARD);
-                        break;
-                    default:
-                        break;
-
-                }
-                //switch((*mapPointer)(x,y)){
-                //    case WALL:
-                //        mvaddch(y,x,'O');
+                //switch ((*mapPointer)(x,y)) {
+                //    case 0:
                 //        break;
-                //    case PLAYER:
-                //        mvaddch(y,x,'F');
-                //        break;
-                //    case ENEMY:
-                //        mvaddch(y,x,'S');
-                //        break;
-                //    case NOTHING:
-                //        mvaddch(y,x,'.');
-                //        break;
-                //    case ITEM:
-                //        mvaddch(y,x,'I');
-                //        break;
-                //    case SHOOT:
-                //        mvaddch(y,x,'-');
+                //    case 1:
+                //        mvaddch(y + 5, x + 5, ACS_CKBOARD);
                 //        break;
                 //    default:
-                //        throw std::invalid_argument("bad wolf");
+                //        break;
+//
                 //}
+                switch((*mapPointer)(x,y)){
+                    case 0:
+                        mvaddch(y + 5, x + 5, ACS_CKBOARD);
+                        //mvaddch(y,x,'O');
+                        break;
+                    case 1:
+                        mvaddch(y,x,'F');
+                        break;
+                    case 2:
+                        mvaddch(y,x,'S');
+                        break;
+                    case 4:
+                        //mvaddch(y,x,'.');
+                        break;
+                    case 5:
+                        mvaddch(y,x,'I');
+                        break;
+                    case 7:
+                        mvaddch(y,x,'-');
+                        break;
+                    default:
+                        throw std::invalid_argument("bad wolf");
+                }
             }
         }
     }

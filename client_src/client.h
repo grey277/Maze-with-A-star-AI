@@ -83,7 +83,7 @@ private:
                                 {
                                     if (!ec)
                                     {
-                                        if(read_msg_.body_length() > 17) {
+                                        if(read_msg_.messageType() == message::type::mapm) {
                                             _map->changeMap(read_msg_.body(), read_msg_.body_length());
                                             _renderer->render(_map);
                                             do_read_header();

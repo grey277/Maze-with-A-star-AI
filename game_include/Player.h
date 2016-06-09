@@ -42,7 +42,6 @@ public:
                             x--;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 'd': if(_map->canMove(x + 1, y)){
@@ -51,7 +50,6 @@ public:
                             x++;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 'w': if(_map->canMove(x, y - 1)){
@@ -60,7 +58,6 @@ public:
                             y--;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 's': if(_map->canMove(x, y + 1)){
@@ -69,7 +66,6 @@ public:
                             y++;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 'q': if(_map->canMove(x - 1, y - 1)){
@@ -79,7 +75,6 @@ public:
                             y--;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 'e': if(_map->canMove(x +1, y - 1)){
@@ -90,7 +85,6 @@ public:
                             y--;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 'c': if(_map->canMove(x + 1, y + 1)){
@@ -100,7 +94,6 @@ public:
                             y++;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
                         }
                         break;
                     case 'z': if(_map->canMove(x - 1, y + 1)){
@@ -110,12 +103,14 @@ public:
                             y++;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
-                            msg.encode_header();
+
                         }
                         break;
                     default: break;
                 }
                 if(send) {
+                    msg.messageType(message::type::playerPosition);
+                    msg.encode_header();
                     _client->write(msg);
                 }
 

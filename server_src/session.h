@@ -32,7 +32,7 @@ public:
 
     void deliver(const message& msg)
     {
-        if(msg.body_length() < 17ul) {
+        if(msg.messageType() == message::type::playerPosition) {
             std::string s(msg.body());
             std::string oldX = s.substr(0, s.find_first_of(","));
             std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
@@ -43,6 +43,7 @@ public:
                 message msgToSend;
                 msgToSend.body_length(std::strlen(_map->toCharStr()));
                 std::memcpy(msgToSend.body(), _map->toCharStr(), msgToSend.body_length());
+                msgToSend.messageType(message::type::mapm);
                 msgToSend.encode_header();
                 deliver(msgToSend);
             } catch(exception &e) {

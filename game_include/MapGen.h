@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "Map.h"
+
 class MapGen {
 public:
     MapGen(int height, int width) : _height(height), _width(width) {
@@ -23,7 +25,7 @@ private:
         for(int i = 0; i < _height; i++) {
             maze[i] = new int[_width];
             for (int j = 0; j < _width; ++j) {
-                maze[i][j] = 1;
+                maze[i][j] = 0;
             }
         }
 
@@ -44,7 +46,7 @@ private:
             if(!c)
                 c = rand() % _height;
         }
-        maze[r][c] = 0;
+        maze[r][c] = 4;
 
         recursion(r, c);
     }
@@ -57,36 +59,36 @@ private:
                 case 1:
                     if(r - 2 <= 0)
                         continue;
-                    if(maze[r - 2][c] != 0) {
-                        maze[r - 2][c] = 0;
-                        maze[r - 1][c] = 0;
+                    if(maze[r - 2][c] != 4) {
+                        maze[r - 2][c] = 4;
+                        maze[r - 1][c] = 4;
                         recursion(r - 2, c);
                     }
                     break;
                 case 2:
                     if(c + 2 >= _width - 1)
                         continue;
-                    if(maze[r][c + 2] != 0) {
-                        maze[r][c + 2] = 0;
-                        maze[r][c + 1] = 0;
+                    if(maze[r][c + 2] != 4) {
+                        maze[r][c + 2] = 4;
+                        maze[r][c + 1] = 4;
                         recursion(r, c + 2);
                     }
                     break;
                 case 3:
                     if(r + 2 >= _height - 1)
                         continue;
-                    if(maze[r + 2][c] != 0) {
-                        maze[r + 2][c] = 0;
-                        maze[r + 1][c] = 0;
+                    if(maze[r + 2][c] != 4) {
+                        maze[r + 2][c] = 4;
+                        maze[r + 1][c] = 4;
                         recursion(r + 2, c);
                     }
                     break;
                 case 4:
                     if(c - 2 <= 0)
                         continue;
-                    if(maze[r][c - 2] != 0) {
-                        maze[r][c - 2] = 0;
-                        maze[r][c - 1] = 0;
+                    if(maze[r][c - 2] != 4) {
+                        maze[r][c - 2] = 4;
+                        maze[r][c - 1] = 4;
                         recursion(r, c - 2);
                     }
                     break;
