@@ -38,7 +38,7 @@ public:
                 //}
                 switch((*mapPointer)(x,y)){
                     case 0:
-                        mvaddch(y + 5, x + 5, ACS_CKBOARD);
+                        mvaddch(y, x, ACS_CKBOARD);
                         //mvaddch(y,x,'O');
                         break;
                     case 1:
