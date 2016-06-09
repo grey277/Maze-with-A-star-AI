@@ -24,15 +24,9 @@ public:
     Point() {
     }
 
-    Point(int xPos, int yPos) {
-        this->xPos = xPos;
-        this->yPos = yPos;
-    }
+    Point(int xPos, int yPos) : xPos(xPos), yPos(yPos) {    }
 
-    Point(const Point &p) {
-        xPos = p.xPos;
-        yPos = p.yPos;
-    }
+    Point(const Point &p) : xPos(p.xPos), yPos(p.yPos) {}
 
     void operator=(Point p) {
         xPos = p.xPos;
@@ -59,7 +53,8 @@ public:
 class Node {
     Point pos;
 
-    int traveled;// distance to current Node
+    int traveled;
+    // distance to current Node
     int priority;
 
 public:
@@ -87,7 +82,7 @@ public:
         priority = node.priority;
     }
 
-    bool operator<(const Node& other) const{
+    bool operator<(const Node &other) const {
         return this->priority > other.priority;
     }
 
@@ -103,7 +98,7 @@ public:
 
     // going strait - 10; going diagonally - 15 which gives 5 points better than strait
     void nextTraveled(const int &direction) {
-        traveled += direction  % 2 == 0 ? 10 : 15;
+        traveled += direction % 2 == 0 ? 10 : 15;
     }
 
     // Estimation distance from point to final point
@@ -115,31 +110,34 @@ public:
 };
 
 class FindShortestPath {
-    Map* _map;
-    int** closedNodesMap; // map of visited Nodes
-    int** openNodesMap; // map of not visited Nodes
-    int** directionMap; // map of directions
-    const static int dir = 8; // number of directions
-
+    Map *_map;
+    int **closedNodesMap; // map of visited Nodes
+    int **openNodesMap; // map of not visited Nodes
+    int **directionMap; // map of directions
+    const static int dir = 4; // number of directions
+    //if dir = 8
+    //Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0), Point(-1, -1), Point(0, -1), Point(1, -1)
     const Point directions[dir];
 
     int horizontalSize;
     int verticalSize;
 
+    string path = "";
+    //static int dx[dir]={1, 0, -1, 0};
+    //static int dy[dir]={0, 1, 0, -1};
 
 public:
-    FindShortestPath(Map* map)
-            : _map(map), directions{Point(1, 0), Point(1, 1), Point(0, 1), Point(-1, 1), Point(-1, 0),
-                         Point(-1, -1), Point(0, -1), Point(1, -1)}    {
+    FindShortestPath(Map *map)
+            : _map(map), directions{Point(1,0), Point(0,1), Point(-1,0), Point(0,-1)} {
 
         horizontalSize = _map->getHorizontalSize();
         verticalSize = _map->getVerticalSize();
 
-        closedNodesMap = new int*[horizontalSize];
-        openNodesMap = new int*[horizontalSize];
-        directionMap = new int*[horizontalSize];
+        closedNodesMap = new int *[horizontalSize];
+        openNodesMap = new int *[horizontalSize];
+        directionMap = new int *[horizontalSize];
 
-        for(int i = 0; i < horizontalSize; i++){
+        for (int i = 0; i < horizontalSize; i++) {
             closedNodesMap[i] = new int[verticalSize];
             openNodesMap[i] = new int[verticalSize];
             directionMap[i] = new int[verticalSize];
@@ -152,8 +150,8 @@ public:
             }
         }
     }
-    
-    void setMap(Map* map) {
+
+    void setMap(Map *map) {
         _map = map;
     }
 
@@ -186,7 +184,7 @@ public:
             closedNodesMap[x][y] = 1;
 
             if (x == finish.getXPos() && y == finish.getYPos()) {
-                string path = "";
+                path = "";
                 int currentDirection;
                 while (!(x == start.getXPos() && y == start.getYPos())) {
                     currentDirection = directionMap[x][y];
@@ -195,7 +193,7 @@ public:
                     x += directions[currentDirection].getXPos();
                     y += directions[currentDirection].getYPos();
                 }
-                if(!path.empty()) {
+                if (!path.empty()) {
                     c = path.at(0);
                     return Point(start.getXPos() + directions[atoi(&c)].getXPos(),
                                  start.getYPos() + directions[atoi(&c)].getYPos());
@@ -210,7 +208,8 @@ public:
 
                 if (nextDirection.getXPos() >= 0 && nextDirection.getXPos() <= horizontalSize - 1
                     && nextDirection.getYPos() >= 0 && nextDirection.getYPos() <= verticalSize - 1
-                    && _map->operator()(nextDirection.getXPos(),nextDirection.getYPos()) != WALL //TODO, check operator()
+                    &&
+                    _map->operator()(nextDirection.getXPos(), nextDirection.getYPos()) != WALL //TODO, check operator()
                     && closedNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] != 1) {
 
                     Node m0(nextDirection, n0.getTraveled(), n0.getPriority());
@@ -251,6 +250,22 @@ public:
             }
         }
         return start; // no route found
+    }
+
+    std::list<Point*>* makePatch(Point start) {
+        std::list<Point*>* l = new std::list<Point*>;
+        char c;
+        int x = start.getXPos();
+        int y = start.getYPos();
+        for (unsigned int i = 0; i < path.length(); i++) {
+            c = path.at(i);
+            int dirX = (int)(c - 48);
+            x = x + directions[dirX].getXPos();
+            y = y + directions[dirX].getYPos();
+            l->push_back(new Point(x, y));
+        }
+
+        return l;
     }
 };
 

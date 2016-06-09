@@ -27,7 +27,7 @@ int main() {
         threads.create_thread(boost::bind(&startServer, io_service));
         Map m(60, 30);
         server server(*io_service, tcp::endpoint(tcp::v4(), 4009), &m);
-        Bot b(20, 20, &server, &m);
+        Bot b(58, 28, &server, &m);
         //std::thread t([&io_service](){ io_service->run(); });
         //auto t = std::async(&boost::asio::io_service::run, *io_service);
 
