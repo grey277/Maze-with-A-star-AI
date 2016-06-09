@@ -14,7 +14,7 @@
 #include "MapGen.h"
 
 enum objectType {
-    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, ITEM = 5, ROUTE = 6, SHOOT = 7
+    WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, DIAMOND = 5
 };
 
 class Map {
@@ -48,6 +48,11 @@ public:
 
     }
 
+    void setDiamond(int x, int y) {
+        LockMutex lock;
+        map[x][y] = DIAMOND;
+    }
+
     const char* toCharStr() {
         LockMutex lock;
         std::string m = "";
@@ -73,9 +78,7 @@ public:
                         break;
                     case '2': map[x][y] = ENEMY; break;
                     case '4': map[x][y] = NOTHING; break;
-                    case '5': map[x][y] = ITEM; break;
-                    case '6': map[x][y] = ROUTE; break;
-                    case '7': map[x][y] = SHOOT; break;
+                    case '5': map[x][y] = DIAMOND; break;
                     default: break;
                 }
                 pos++;
@@ -99,51 +102,6 @@ public:
         LockMutex lock;
         return !(x < 0 || x >= horizontalSize || y < 0 || y >= verticalSize
                  || map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY );
-    }
-
-    void addBullet(int x, int y) {
-        map[x][y] = SHOOT;
-    }
-
-    bool stopBullet(int x, int y) {
-        return map[x][y] == WALL || map[x][y] == PLAYER || map[x][y] == ENEMY;
-    }
-
-    bool canShoot(int botPosX, int botPosY, int playerPosX, int playerPosY){
-        LockMutex lock;
-        if(botPosX == playerPosX) {
-            if(botPosY < playerPosY) {
-                for (int y = botPosY + 1; y < playerPosY; ++y) {
-                    if(map[botPosX][y] == WALL){
-                        return false;
-                    }
-                }
-                return true;
-            }
-            for (int y = botPosY - 1; y < playerPosY; --y) {
-                if(map[botPosX][y] == WALL){
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if(botPosY == playerPosY){
-            if(botPosX < playerPosX) {
-                for (int x = botPosX + 1; x < playerPosX; ++x) {
-                    if(map[botPosY][x] == WALL){
-                        return false;
-                    }
-                }
-                return true;
-            }
-            for (int x = botPosX - 1; x < playerPosX; --x) {
-                if(map[botPosY][x] == WALL){
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     void setPlayerPosition(int x, int y) {

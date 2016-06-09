@@ -24,9 +24,9 @@ public:
     Point() {
     }
 
-    Point(int xPos, int yPos) : xPos(xPos), yPos(yPos) {    }
+    Point(int xPos, int yPos) : xPos(xPos), yPos(yPos) { }
 
-    Point(const Point &p) : xPos(p.xPos), yPos(p.yPos) {}
+    Point(const Point &p) : xPos(p.xPos), yPos(p.yPos) { }
 
     void operator=(Point p) {
         xPos = p.xPos;
@@ -123,12 +123,12 @@ class FindShortestPath {
     int verticalSize;
 
     string path = "";
-    //static int dx[dir]={1, 0, -1, 0};
-    //static int dy[dir]={0, 1, 0, -1};
+
+    Point middleOfPath;
 
 public:
     FindShortestPath(Map *map)
-            : _map(map), directions{Point(1,0), Point(0,1), Point(-1,0), Point(0,-1)} {
+            : _map(map), directions{Point(1, 0), Point(0, 1), Point(-1, 0), Point(0, -1)} {
 
         horizontalSize = _map->getHorizontalSize();
         verticalSize = _map->getVerticalSize();
@@ -252,21 +252,26 @@ public:
         return start; // no route found
     }
 
-    std::list<Point*>* makePatch(Point start) {
-        std::list<Point*>* l = new std::list<Point*>;
+    std::list<Point *> *makePatch(Point start) {
+        std::list<Point *> *l = new std::list<Point *>;
         char c;
         int x = start.getXPos();
         int y = start.getYPos();
         for (unsigned int i = 0; i < path.length(); i++) {
             c = path.at(i);
-            int dirX = (int)(c - 48);
+            int dirX = (int) (c - 48);
             x = x + directions[dirX].getXPos();
             y = y + directions[dirX].getYPos();
             l->push_back(new Point(x, y));
+            if(i == path.length() / 2) {
+                middleOfPath = Point(x, y);
+            }
         }
 
         return l;
     }
+
+    Point getMiddle() { return middleOfPath; }
 };
 
 #endif //QUAKEWITHSOCKETS_FINDSHORTESTPATH_H

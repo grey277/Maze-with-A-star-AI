@@ -24,20 +24,14 @@ public:
         endwin();
     }
     void printTable(Map* mapPointer) {
+        start_color();
+        init_pair(1, COLOR_BLACK, COLOR_RED);
+        //init_pair(2, COLOR_BLACK, COLOR_GREEN);
         for (int y = 1; y < mapPointer->getVerticalSize(); y++) {
             for (int x = 1; x < mapPointer->getHorizontalSize(); x++) {
-                //switch ((*mapPointer)(x,y)) {
-                //    case 0:
-                //        break;
-                //    case 1:
-                //        mvaddch(y + 5, x + 5, ACS_CKBOARD);
-                //        break;
-                //    default:
-                //        break;
-//
-                //}
                 switch((*mapPointer)(x,y)){
                     case 0:
+                        attron(COLOR_PAIR(1));
                         mvaddch(y, x, ACS_CKBOARD);
                         //mvaddch(y,x,'O');
                         break;
@@ -51,10 +45,7 @@ public:
                         //mvaddch(y,x,'.');
                         break;
                     case 5:
-                        mvaddch(y,x,'I');
-                        break;
-                    case 7:
-                        mvaddch(y,x,'-');
+                        mvaddch(y,x, ACS_DIAMOND);
                         break;
                     default:
                         throw std::invalid_argument("bad wolf");

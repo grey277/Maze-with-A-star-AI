@@ -14,12 +14,12 @@
 
 class Bot {
 private:
-    server* _server;
+    server *_server;
     Map *_map;
     int x;
     int y;
 
-    std::list<Point*>* path;
+    std::list<Point *> *path;
 
 public:
     Bot(int startX, int startY, server *server, Map *map) : _server(server), _map(map) {
@@ -31,26 +31,22 @@ public:
         f.pathFind(Point(x, y), Point(_map->getPlayerX(), _map->getPlayerY()));
         path = f.makePatch(Point(x, y));
 
-        while(!path->empty()) {
-            auto t = std::async(&Bot::startThread, this);
-            auto info = t.get();
-            auto start = std::chrono::high_resolution_clock::now();
-            clock_t begin = clock();
+        path->resize(path->size() / 2);
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        _map->setDiamond(f.getMiddle().getXPos(), f.getMiddle().getYPos());
 
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> e = end - start;
-            std::cout << e.count();
-            double a;
+        while (!path->empty()) {
+            boost::thread t(boost::bind(&Bot::startThread, this));
+            t.join();
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
 
     }
 
     bool startThread() {
-        Point* p = path->front();
+        Point *p = path->front();
         path->pop_front();
-        if(_map->canMove(p->getXPos(), p->getYPos())) {
+        if (_map->canMove(p->getXPos(), p->getYPos())) {
             _map->updateBotPosition(x, y, p->getXPos(), p->getYPos());
             x = p->getXPos();
             y = p->getYPos();

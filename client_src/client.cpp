@@ -18,24 +18,14 @@ int main() {
     //threads.create_thread(boost::bind(&startClient, io_service_client));
     tcp::resolver resolver(*io_service_client);
     auto endpoint_iterator = resolver.resolve({"localhost", "4009"});
-    //std::mutex Map::lock = new std::mutex;
     Map m(60, 30);
     Renderer r;
     client c(*io_service_client, endpoint_iterator, &m, &r);
     std::thread t([&io_service_client](){ io_service_client->run(); });
     Game game(&c, &m);
     game.addPlayer();
-    //char line[message::max_body_length + 1];
-    //while (std::cin.getline(line, message::max_body_length + 1))
-    //{
-    //    message msg;
-    //    msg.body_length(std::strlen(line));
-    //    std::memcpy(msg.body(), line, msg.body_length());
-    //    msg.encode_header();
-    //    c.write(msg);
-    //}
 
-    while(true) { }
+    //while(true) { }
 
     c.close();
     return 0;
