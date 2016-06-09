@@ -177,56 +177,6 @@ public:
         return map[x][y];
     }
 
-    void makeMap(){
-        LockMutex lock;
-        for (int x = 2 + horizontalSize / 8; x < horizontalSize * 7 / 8 - 1; x++) {
-            map[x][verticalSize / 2] = WALL;
-        }
-        for (int y = 1 + verticalSize / 8; y < verticalSize * 7 / 8; y++) {
-            map[horizontalSize / 2][y] = WALL;
-        }
-
-        for(int x = 0; x < horizontalSize; x++){
-            map[x][0] = map[x][verticalSize - 1] = WALL;
-        }
-
-        for(int y = 0; y < verticalSize; y++){
-            map[0][y] = map[horizontalSize - 1][y] = WALL;
-        }
-    }
-
-    void makeRandomMap() {
-        LockMutex lock;
-        srand(time(NULL));
-
-        for (int i = 0; i < horizontalSize; i++) {
-            for (int j = 0; j < verticalSize; ++j) {
-                int randomize = rand() % 128;
-                if (randomize <= 96) // 75% of map is NOTHING and 25% is WALL
-                    map[i][j] = NOTHING;
-                else
-                    map[i][j] = WALL;
-            }
-        }
-    }
-
-    void generate() { // updating map, can make new item or nothing
-        LockMutex lock;
-        srand(time(NULL));
-        int horizontal, vertical;
-        do {
-            horizontal = rand() % horizontalSize;
-            vertical = rand() % verticalSize;
-        }while(map[horizontal][vertical] != NOTHING);
-
-        int randomize = rand() % 128;
-        if (randomize <= 124) // 97% chances to make ITEM
-            map[horizontal][vertical] = NOTHING;
-        else
-            map[horizontal][vertical] = ITEM;
-
-    }
-
     int** getMap(){
         LockMutex lock;
         return map;
