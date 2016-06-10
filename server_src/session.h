@@ -61,6 +61,17 @@ public:
                 msgToSend.encode_header();
                 for (auto participant: participants_)
                     participant->deliver(msgToSend);
+                int whoWon = _map->didWon();
+                if(whoWon != (int) NOTHING ){
+                    message message;
+                    message.body_length(std::to_string(whoWon).length() + 1); // for null char
+                    std::memcpy(message.body(), std::to_string(whoWon).c_str(), message.body_length());
+                    message.messageType(message::type::endGame);
+                    message.encode_header();
+                    for (auto participant: participants_)
+                        participant->deliver(message);
+                }
+
             }
 
 

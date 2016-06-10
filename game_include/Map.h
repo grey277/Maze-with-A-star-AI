@@ -23,6 +23,7 @@ private:
     const int verticalSize;
     int **map;
     Point playerPosition, botPosition;
+    Point diamond;
     static std::mutex lock;
 
     class LockMutex {
@@ -49,6 +50,7 @@ public:
     void setDiamond(int x, int y) {
         LockMutex lock;
         map[x][y] = DIAMOND;
+        diamond = Point(x, y);
     }
 
     const char* toCharStr() {
@@ -137,6 +139,33 @@ public:
     int** getMap(){
         LockMutex lock;
         return map;
+    }
+
+//    string objectTypeToString(objectType o){
+//        switch(0){
+//            case '0':
+//                return "WALL";
+//            case '1':
+//                return "PLAYER";
+//            case '2':
+//                return "ENEMY";
+//            case '4':
+//                return "NOTHING";
+//            case '5':
+//                return "DIAMOND";
+//            default:
+//                return "";
+//        }
+//    }
+
+    int didWon(){
+        if(map[diamond.x + 1][diamond.y] == PLAYER || map[diamond.x - 1][diamond.y] == PLAYER
+           || map[diamond.x][diamond.y + 1] == PLAYER || map[diamond.x][diamond.y - 1] == PLAYER)
+            return (int) PLAYER;
+        else if(map[diamond.x + 1][diamond.y] == ENEMY || map[diamond.x - 1][diamond.y] == ENEMY
+                || map[diamond.x][diamond.y + 1] == ENEMY || map[diamond.x][diamond.y - 1] == ENEMY)
+            return (int) ENEMY;
+        return (int) NOTHING;
     }
 };
 

@@ -79,7 +79,8 @@ private:
                                 boost::asio::buffer(read_msg_.body(), read_msg_.body_length()),
                                 [this](boost::system::error_code ec, std::size_t /*length*/)
                                 {
-                                    if (!ec)
+                                    bool didWon = false;
+                                    if (!ec || !didWon)
                                     {
                                         if(read_msg_.messageType() == message::type::mapm) {
                                             (*_map).changeMap(read_msg_.body(), read_msg_.body_length());
@@ -119,7 +120,10 @@ private:
                                                 _renderer->render(std::stoi(tokens[2]), std::stoi(tokens[3]));
                                             }
                                         }
-
+                                        else if(read_msg_.messageType() == message::type::endGame) {
+                                            didWon = true;
+                                            (*_renderer).printWinText((int) read_msg_.body()[0]);
+                                        }
 
                                         do_read_header();
                                     }
