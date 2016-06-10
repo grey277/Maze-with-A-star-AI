@@ -1,34 +1,84 @@
-//
-// Created by raiden on 03.06.16.
-//
-
 #ifndef QUAKE_RENDERER_H
 #define QUAKE_RENDERER_H
 
 #include <ncurses.h>
-#include <exception>
 
 class Renderer {
 private:
     boost::shared_ptr<Map> _map;
 //    34/5
-    int winText[35][5] = {{1,0,0,0,0},{0,1,0,0,0},{0,0,1,1,1},{0,1,0,0,0},{1,0,0,0,0},
-                          {0,0,0,0,0},{1,1,1,1,1},{1,0,0,0,1},{1,0,0,0,1},{1,1,1,1,1},
-                          {0,0,0,0,0},{1,1,1,1,1},{0,0,0,0,1},{0,0,0,0,1},{1,1,1,1,1},
-                          {0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{1,1,1,1,1},{0,0,0,1,0},
-                          {0,0,1,0,0},{0,0,0,1,0},{1,1,1,1,1},{0,0,0,0,0},{1,1,1,1,1},
-                          {1,0,0,0,1},{1,0,0,0,1},{1,1,1,1,1},{0,0,0,0,0},{1,1,1,1,1},
-                          {0,1,0,0,0},{0,0,1,0,0}, {0,0,0,1,0},{1,1,1,1,1}};
+    int winText[35][5] = {{1, 0, 0, 0, 0},
+                          {0, 1, 0, 0, 0},
+                          {0, 0, 1, 1, 1},
+                          {0, 1, 0, 0, 0},
+                          {1, 0, 0, 0, 0},
+                          {0, 0, 0, 0, 0},
+                          {1, 1, 1, 1, 1},
+                          {1, 0, 0, 0, 1},
+                          {1, 0, 0, 0, 1},
+                          {1, 1, 1, 1, 1},
+                          {0, 0, 0, 0, 0},
+                          {1, 1, 1, 1, 1},
+                          {0, 0, 0, 0, 1},
+                          {0, 0, 0, 0, 1},
+                          {1, 1, 1, 1, 1},
+                          {0, 0, 0, 0, 0},
+                          {0, 0, 0, 0, 0},
+                          {0, 0, 0, 0, 0},
+                          {1, 1, 1, 1, 1},
+                          {0, 0, 0, 1, 0},
+                          {0, 0, 1, 0, 0},
+                          {0, 0, 0, 1, 0},
+                          {1, 1, 1, 1, 1},
+                          {0, 0, 0, 0, 0},
+                          {1, 1, 1, 1, 1},
+                          {1, 0, 0, 0, 1},
+                          {1, 0, 0, 0, 1},
+                          {1, 1, 1, 1, 1},
+                          {0, 0, 0, 0, 0},
+                          {1, 1, 1, 1, 1},
+                          {0, 1, 0, 0, 0},
+                          {0, 0, 1, 0, 0},
+                          {0, 0, 0, 1, 0},
+                          {1, 1, 1, 1, 1}};
 
-    int looseText[37][5] = {{1,0,0,0,0},{0,1,0,0,0},{0,0,1,1,1},{0,1,0,0,0},{1,0,0,0,0},
-                            {0,0,0,0,0},{1,1,1,1,1},{1,0,0,0,1},{1,0,0,0,1},{1,1,1,1,1},
-                            {0,0,0,0,0},{1,1,1,1,1},{0,0,0,0,1},{0,0,0,0,1},{1,1,1,1,1},
-                            {0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},
-                            {1,1,1,1,1},{0,0,0,0,1},{0,0,0,0,1},{0,0,0,0,1},
-                            {0,0,0,0,0},{1,1,1,1,1},{1,0,0,0,1},{1,0,0,0,1},
-                            {1,1,1,1,1},{0,0,0,0,0},{1,1,1,0,1},{1,0,1,0,1},{1,0,1,0,1},
-                            {1,0,1,1,1},{0,0,0,0,0},{1,1,1,1,1},{1,0,1,0,1},{1,0,1,0,1},
-                            {1,0,1,0,1}};
+    int looseText[37][5] = {{1, 0, 0, 0, 0},
+                            {0, 1, 0, 0, 0},
+                            {0, 0, 1, 1, 1},
+                            {0, 1, 0, 0, 0},
+                            {1, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0},
+                            {1, 1, 1, 1, 1},
+                            {1, 0, 0, 0, 1},
+                            {1, 0, 0, 0, 1},
+                            {1, 1, 1, 1, 1},
+                            {0, 0, 0, 0, 0},
+                            {1, 1, 1, 1, 1},
+                            {0, 0, 0, 0, 1},
+                            {0, 0, 0, 0, 1},
+                            {1, 1, 1, 1, 1},
+                            {0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0},
+                            {1, 1, 1, 1, 1},
+                            {0, 0, 0, 0, 1},
+                            {0, 0, 0, 0, 1},
+                            {0, 0, 0, 0, 1},
+                            {0, 0, 0, 0, 0},
+                            {1, 1, 1, 1, 1},
+                            {1, 0, 0, 0, 1},
+                            {1, 0, 0, 0, 1},
+                            {1, 1, 1, 1, 1},
+                            {0, 0, 0, 0, 0},
+                            {1, 1, 1, 0, 1},
+                            {1, 0, 1, 0, 1},
+                            {1, 0, 1, 0, 1},
+                            {1, 0, 1, 1, 1},
+                            {0, 0, 0, 0, 0},
+                            {1, 1, 1, 1, 1},
+                            {1, 0, 1, 0, 1},
+                            {1, 0, 1, 0, 1},
+                            {1, 0, 1, 0, 1}};
 
 public:
     Renderer(boost::shared_ptr<Map> map) : _map(map) {
@@ -44,6 +94,7 @@ public:
     ~Renderer() {
         endwin();
     }
+
     void printTable() {
         start_color();
         init_pair(1, COLOR_BLACK, COLOR_RED);
@@ -51,25 +102,25 @@ public:
         init_pair(3, COLOR_WHITE, COLOR_BLACK);
         for (int y = 1; y < _map->getVerticalSize(); y++) {
             for (int x = 1; x < _map->getHorizontalSize(); x++) {
-                switch((*_map)(x,y)){
+                switch ((*_map)(x, y)) {
                     case WALL:
                         attron(COLOR_PAIR(1));
                         mvaddch(y, x, ACS_CKBOARD);
                         //mvaddch(y,x,'O');
                         break;
                     case PLAYER:
-                        mvaddch(y,x,'F');
+                        mvaddch(y, x, 'F');
                         break;
                     case ENEMY:
-                        mvaddch(y,x,'S');
+                        mvaddch(y, x, 'S');
                         break;
                     case NOTHING:
                         attron(COLOR_PAIR(2));
-                        mvaddch(y,x,' ');
+                        mvaddch(y, x, ' ');
                         break;
                     case DIAMOND:
                         attron(COLOR_PAIR(3));
-                        mvaddch(y,x, ACS_DIAMOND);
+                        mvaddch(y, x, ACS_DIAMOND);
                         break;
                     default:
                         throw std::invalid_argument("bad wolf");
@@ -81,22 +132,22 @@ public:
     void render(int x, int y) {
         start_color();
         init_pair(1, COLOR_BLACK, COLOR_RED);
-        switch((*_map)(x,y)){
+        switch ((*_map)(x, y)) {
             case WALL:
                 attron(COLOR_PAIR(1));
                 mvaddch(y, x, ACS_CKBOARD);
                 break;
             case PLAYER:
-                mvaddch(y,x,'F');
+                mvaddch(y, x, 'F');
                 break;
             case ENEMY:
-                mvaddch(y,x,'S');
+                mvaddch(y, x, 'S');
                 break;
             case NOTHING:
-                mvaddch(y,x,' ');
+                mvaddch(y, x, ' ');
                 break;
             case DIAMOND:
-                mvaddch(y,x, ACS_DIAMOND);
+                mvaddch(y, x, ACS_DIAMOND);
                 break;
             default:
                 throw std::invalid_argument("bad wolf");
@@ -104,20 +155,20 @@ public:
         refresh();
     }
 
-    void render(){
+    void render() {
         clear();
         printTable();
         refresh();
     }
 
-    void printWinTable(){
+    void printWinTable() {
         init_pair(1, COLOR_BLUE, COLOR_BLACK);
-        for(int x = 0; x < 35; x++){
-            for(int y = 0; y < 5; y++){
-                switch (winText[x][y]){
+        for (int x = 0; x < 35; x++) {
+            for (int y = 0; y < 5; y++) {
+                switch (winText[x][y]) {
                     case 1:
                         attron(COLOR_PAIR(1));
-                        mvaddch(y, x, ACS_CKBOARD );
+                        mvaddch(y, x, ACS_CKBOARD);
                         break;
                     case 0:
                         //mvaddch(y, x, ' ' );
@@ -129,14 +180,14 @@ public:
         }
     }
 
-    void printLooseTable(){
+    void printLooseTable() {
         init_pair(1, COLOR_BLUE, COLOR_BLACK);
-        for(int x = 0; x < 37; x++){
-            for(int y = 0; y < 5; y++){
-                switch (looseText[x][y]){
+        for (int x = 0; x < 37; x++) {
+            for (int y = 0; y < 5; y++) {
+                switch (looseText[x][y]) {
                     case 1:
                         attron(COLOR_PAIR(1));
-                        mvaddch(y, x, ACS_CKBOARD );
+                        mvaddch(y, x, ACS_CKBOARD);
                         break;
                     case 0:
                         //mvaddch(y, x, ' ' );
@@ -148,11 +199,11 @@ public:
         }
     }
 
-    void printWinText(int whoWon){
+    void printWinText(int whoWon) {
         clear();
-        if(whoWon == PLAYER)
+        if (whoWon == PLAYER)
             printWinTable();
-        if(whoWon == ENEMY)
+        if (whoWon == ENEMY)
             printLooseTable();
         refresh();
     }

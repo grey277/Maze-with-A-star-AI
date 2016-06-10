@@ -1,14 +1,6 @@
-//
-// Created by grey on 03.06.16.
-//
-
 #ifndef QUAKE_PLAYER_H
 #define QUAKE_PLAYER_H
 
-#include <ncurses.h>
-#include "../client_src/client.h"
-#include "Renderer.h"
-#include <iostream>
 #include <thread>
 
 class Player {
@@ -18,7 +10,8 @@ private:
     int x;
     int y;
 public:
-    Player(int startX, int startY, boost::shared_ptr<client> client, boost::shared_ptr<Map> map) : _client(client), _map(map) {
+    Player(int startX, int startY, boost::shared_ptr<client> client, boost::shared_ptr<Map> map) : _client(client),
+                                                                                                   _map(map) {
         x = startX;
         y = startY;
         _map->setPlayerPosition(x, y);
@@ -26,50 +19,59 @@ public:
     }
 
     void startThread() {
-        while(true) {
+        while (true) {
             std::this_thread::sleep_for(std::chrono::milliseconds(20));
             char ch;
             ch = getch();
-            if(ch > 0) {
+            if (ch > 0) {
                 bool send = false;
                 message msg;
                 std::string s = "";
-                switch(ch) {
-                    case 'a': if(_map->canMove(x - 1, y)){
+                switch (ch) {
+                    case 'a':
+                        if (_map->canMove(x - 1, y)) {
                             send = true;
-                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x-1) + "," + std::to_string(y) + ",";
+                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x - 1) + "," +
+                                 std::to_string(y) + ",";
                             x--;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
                         }
                         break;
-                    case 'd': if(_map->canMove(x + 1, y)){
+                    case 'd':
+                        if (_map->canMove(x + 1, y)) {
                             send = true;
-                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x+1) + "," + std::to_string(y) + ",";
+                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x + 1) + "," +
+                                 std::to_string(y) + ",";
                             x++;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
                         }
                         break;
-                    case 'w': if(_map->canMove(x, y - 1)){
+                    case 'w':
+                        if (_map->canMove(x, y - 1)) {
                             send = true;
-                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x) + "," + std::to_string(y-1) + ",";
+                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x) + "," +
+                                 std::to_string(y - 1) + ",";
                             y--;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
                         }
                         break;
-                    case 's': if(_map->canMove(x, y + 1)){
+                    case 's':
+                        if (_map->canMove(x, y + 1)) {
                             send = true;
-                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x) + "," + std::to_string(y+1) + ",";
+                            s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(x) + "," +
+                                 std::to_string(y + 1) + ",";
                             y++;
                             msg.body_length(s.length());
                             std::memcpy(msg.body(), s.c_str(), msg.body_length());
                         }
                         break;
-                    default: break;
+                    default:
+                        break;
                 }
-                if(send) {
+                if (send) {
                     msg.messageType(message::type::playerPosition);
                     msg.encode_header();
                     _client->write(msg);

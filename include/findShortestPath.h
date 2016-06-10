@@ -1,18 +1,7 @@
-//
-// Created by Adrian on 2016-05-27.
-//
-
 #ifndef QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
 #define QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
 
-
-#include <iostream>
 #include <queue>
-#include <cmath>
-
-#include "Map.h"
-#include "Point.h"
-
 
 using namespace std;
 
@@ -224,7 +213,7 @@ public:
             x = x + directions[dirX].x;
             y = y + directions[dirX].y;
             l->push_back(new Point(x, y));
-            if(i == path.length() / 2) {
+            if (i == path.length() / 2) {
                 middleOfPath = Point(x, y);
             }
         }

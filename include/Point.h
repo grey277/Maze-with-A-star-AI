@@ -1,7 +1,3 @@
-//
-// Created by grey on 10.06.16.
-//
-
 #ifndef QUAKE_POINT_H
 #define QUAKE_POINT_H
 
@@ -24,10 +20,6 @@ public:
     bool operator==(Point p) {
         return x == p.x && y == p.y;
     }
-
-    //friend ostream &operator<<(ostream &cout, const Point &p) {
-    //    return cout << p.x << "," << p.y;
-    //}
 };
 
 #endif //QUAKE_POINT_H
