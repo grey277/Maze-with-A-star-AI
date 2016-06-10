@@ -9,8 +9,10 @@
 #include <exception>
 
 class Renderer {
+private:
+    Map* _map;
 public:
-    Renderer() {
+    Renderer(Map* map) : _map(map) {
         initscr();
         raw();
         cbreak();
@@ -23,13 +25,13 @@ public:
     ~Renderer() {
         endwin();
     }
-    void printTable(Map* mapPointer) {
+    void printTable() {
         start_color();
         init_pair(1, COLOR_BLACK, COLOR_RED);
         //init_pair(2, COLOR_BLACK, COLOR_GREEN);
-        for (int y = 1; y < mapPointer->getVerticalSize(); y++) {
-            for (int x = 1; x < mapPointer->getHorizontalSize(); x++) {
-                switch((*mapPointer)(x,y)){
+        for (int y = 1; y < _map->getVerticalSize(); y++) {
+            for (int x = 1; x < _map->getHorizontalSize(); x++) {
+                switch((*_map)(x,y)){
                     case 0:
                         attron(COLOR_PAIR(1));
                         mvaddch(y, x, ACS_CKBOARD);
@@ -54,9 +56,9 @@ public:
         }
     }
 
-    void render(Map* map){
+    void render(){
         clear();
-        printTable(map);
+        printTable();
         refresh();
     }
 };

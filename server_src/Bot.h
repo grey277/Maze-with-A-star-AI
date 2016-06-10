@@ -33,7 +33,7 @@ public:
 
         path->resize(path->size() / 2);
 
-        _map->setDiamond(f.getMiddle().getXPos(), f.getMiddle().getYPos());
+        _map->setDiamond(f.getMiddle().x, f.getMiddle().y);
 
         while (!path->empty()) {
             boost::thread t(boost::bind(&Bot::startThread, this));
@@ -46,10 +46,10 @@ public:
     bool startThread() {
         Point *p = path->front();
         path->pop_front();
-        if (_map->canMove(p->getXPos(), p->getYPos())) {
-            _map->updateBotPosition(x, y, p->getXPos(), p->getYPos());
-            x = p->getXPos();
-            y = p->getYPos();
+        if (_map->canMove(p->x, p->y)) {
+            _map->updateBotPosition(x, y, p->x, p->y);
+            x = p->x;
+            y = p->y;
         }
         message msg;
         msg.body_length(std::strlen(_map->toCharStr()));

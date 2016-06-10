@@ -85,7 +85,7 @@ private:
                                     {
                                         if(read_msg_.messageType() == message::type::mapm) {
                                             _map->changeMap(read_msg_.body(), read_msg_.body_length());
-                                            _renderer->render(_map);
+                                            _renderer->render();
                                             do_read_header();
                                         }
                                     }

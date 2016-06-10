@@ -7,11 +7,11 @@
 
 #include <time.h>
 #include <cstdlib>
-
 #include <string.h>
 #include <mutex>
 
 #include "MapGen.h"
+#include "Point.h"
 
 enum objectType {
     WALL = 0, PLAYER = 1, ENEMY = 2, NOTHING = 4, DIAMOND = 5
@@ -22,11 +22,10 @@ private:
     const int horizontalSize;
     const int verticalSize;
     int **map;
-    int playerX, playerY;
+    Point playerPosition, botPosition;
     static std::mutex lock;
 
-    class LockMutex
-    {
+    class LockMutex {
     public:
 
         inline LockMutex()
@@ -42,10 +41,9 @@ private:
 
 public:
     Map(int horizontalSize, int verticalSize)
-            : horizontalSize(horizontalSize), verticalSize(verticalSize), playerX(2), playerY(2) {
+            : horizontalSize(horizontalSize), verticalSize(verticalSize), playerPosition(2, 2) {
         MapGen gen(horizontalSize, verticalSize);
         map = gen.getMaze();
-
     }
 
     void setDiamond(int x, int y) {
@@ -73,10 +71,11 @@ public:
                 switch(message.at(pos)){
                     case '0': map[x][y] = WALL; break;
                     case '1': map[x][y] = PLAYER;
-                        playerX = x;
-                        playerY = y;
+                        playerPosition = Point(x, y);
                         break;
-                    case '2': map[x][y] = ENEMY; break;
+                    case '2': map[x][y] = ENEMY;
+                        botPosition = Point(x, y);
+                        break;
                     case '4': map[x][y] = NOTHING; break;
                     case '5': map[x][y] = DIAMOND; break;
                     default: break;
@@ -92,11 +91,11 @@ public:
 
     int getPlayerX() {
         LockMutex lock;
-        return playerX; }
+        return playerPosition.x; }
 
     int getPlayerY() {
         LockMutex lock;
-        return playerY; }
+        return playerPosition.y; }
 
     bool canMove(int x, int y) {
         LockMutex lock;
@@ -107,27 +106,27 @@ public:
     void setPlayerPosition(int x, int y) {
         LockMutex lock;
         map[x][y] = PLAYER;
-        playerX= x;
-        playerY = y;
+        playerPosition = Point(x, y);
     }
 
     void setBotPosition(int x, int y) {
         LockMutex lock;
         map[x][y] = ENEMY;
+        botPosition = Point(x, y);
     }
 
     void updateBotPosition(int oldX, int oldY, int x, int y) {
         LockMutex lock;
         map[oldX][oldY] = NOTHING;
         map[x][y] = ENEMY;
+        botPosition = Point(x, y);
     }
 
     void updatePlayerPosition(int oldX, int oldY, int x, int y) {
         LockMutex lock;
         map[oldX][oldY] = NOTHING;
         map[x][y] = PLAYER;
-        playerX = x;
-        playerY = y;
+        playerPosition = Point(x, y);
     }
 
     const int operator()(const int x, const int y) const {

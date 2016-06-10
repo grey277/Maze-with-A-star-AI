@@ -19,7 +19,7 @@ int main() {
     tcp::resolver resolver(*io_service_client);
     auto endpoint_iterator = resolver.resolve({"localhost", "4009"});
     Map m(60, 30);
-    Renderer r;
+    Renderer r(&m);
     client c(*io_service_client, endpoint_iterator, &m, &r);
     std::thread t([&io_service_client](){ io_service_client->run(); });
     Game game(&c, &m);

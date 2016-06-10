@@ -11,44 +11,10 @@
 #include <cmath>
 
 #include "Map.h"
+#include "Point.h"
 
 
 using namespace std;
-
-
-class Point {
-    int xPos;
-    int yPos;
-
-public:
-    Point() {
-    }
-
-    Point(int xPos, int yPos) : xPos(xPos), yPos(yPos) { }
-
-    Point(const Point &p) : xPos(p.xPos), yPos(p.yPos) { }
-
-    void operator=(Point p) {
-        xPos = p.xPos;
-        yPos = p.yPos;
-    }
-
-    bool operator==(Point p) {
-        return xPos == p.xPos && yPos == p.yPos;
-    }
-
-    int getXPos() const {
-        return xPos;
-    }
-
-    int getYPos() const {
-        return yPos;
-    }
-
-    friend ostream &operator<<(ostream &cout, const Point &p) {
-        return cout << p.getXPos() << "," << p.getYPos();
-    }
-};
 
 class Node {
     Point pos;
@@ -103,9 +69,8 @@ public:
 
     // Estimation distance from point to final point
     const int estimate(const Point destination) const {
-        return (int) (sqrt(destination.getXPos() - pos.getXPos() * destination.getXPos()
-                           - pos.getXPos() + destination.getYPos() - pos.getYPos()
-                                                                     * destination.getYPos() - pos.getYPos()));
+        return (int) (sqrt(destination.x - pos.x * destination.x
+                           - pos.x + destination.y - pos.y * destination.y - pos.y));
     }
 };
 
@@ -177,61 +142,61 @@ public:
             n0 = Node(queue[queueIndex].top());
             queue[queueIndex].pop();
 
-            x = n0.getPos().getXPos();
-            y = n0.getPos().getYPos();
+            x = n0.getPos().x;
+            y = n0.getPos().y;
 
             openNodesMap[x][y] = 0;
             closedNodesMap[x][y] = 1;
 
-            if (x == finish.getXPos() && y == finish.getYPos()) {
+            if (x == finish.x && y == finish.y) {
                 path = "";
                 int currentDirection;
-                while (!(x == start.getXPos() && y == start.getYPos())) {
+                while (!(x == start.x && y == start.y)) {
                     currentDirection = directionMap[x][y];
                     c = '0' + (char) ((currentDirection + dir / 2) % dir);
                     path = c + path;
-                    x += directions[currentDirection].getXPos();
-                    y += directions[currentDirection].getYPos();
+                    x += directions[currentDirection].x;
+                    y += directions[currentDirection].y;
                 }
                 if (!path.empty()) {
                     c = path.at(0);
-                    return Point(start.getXPos() + directions[atoi(&c)].getXPos(),
-                                 start.getYPos() + directions[atoi(&c)].getYPos());
+                    return Point(start.x + directions[atoi(&c)].x,
+                                 start.y + directions[atoi(&c)].y);
                 }
-                return Point(start.getXPos(), start.getYPos());
+                return Point(start.x, start.y);
             }
 
             // make moves in all directions
             for (int currentDirection = 0; currentDirection < dir; currentDirection++) {
-                Point nextDirection(x + directions[currentDirection].getXPos(),
-                                    y + directions[currentDirection].getYPos());
+                Point nextDirection(x + directions[currentDirection].x,
+                                    y + directions[currentDirection].y);
 
-                if (nextDirection.getXPos() >= 0 && nextDirection.getXPos() <= horizontalSize - 1
-                    && nextDirection.getYPos() >= 0 && nextDirection.getYPos() <= verticalSize - 1
+                if (nextDirection.x >= 0 && nextDirection.x <= horizontalSize - 1
+                    && nextDirection.y >= 0 && nextDirection.y <= verticalSize - 1
                     &&
-                    _map->operator()(nextDirection.getXPos(), nextDirection.getYPos()) != WALL //TODO, check operator()
-                    && closedNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] != 1) {
+                    _map->operator()(nextDirection.x, nextDirection.y) != WALL //TODO, check operator()
+                    && closedNodesMap[nextDirection.x][nextDirection.y] != 1) {
 
                     Node m0(nextDirection, n0.getTraveled(), n0.getPriority());
                     m0.nextTraveled(currentDirection);
                     m0.updatePriority(finish);
 
-                    if (openNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] == 0) {
-                        openNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] = m0.getPriority();
+                    if (openNodesMap[nextDirection.x][nextDirection.y] == 0) {
+                        openNodesMap[nextDirection.x][nextDirection.y] = m0.getPriority();
                         queue[queueIndex].push(m0);
 
-                        directionMap[nextDirection.getXPos()][nextDirection.getYPos()] =
+                        directionMap[nextDirection.x][nextDirection.y] =
                                 (currentDirection + dir / 2) % dir; //update direction map
                     }
-                    else if (openNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] > m0.getPriority()) {
+                    else if (openNodesMap[nextDirection.x][nextDirection.y] > m0.getPriority()) {
                         // update the priority info in openNodesMap
-                        openNodesMap[nextDirection.getXPos()][nextDirection.getYPos()] = m0.getPriority();
+                        openNodesMap[nextDirection.x][nextDirection.y] = m0.getPriority();
                         // update the parent direction info in directionMap
-                        directionMap[nextDirection.getXPos()][nextDirection.getYPos()] =
+                        directionMap[nextDirection.x][nextDirection.y] =
                                 (currentDirection + dir / 2) % dir; //update direction map
 
-                        while (!(queue[queueIndex].top().getPos().getXPos() == nextDirection.getXPos() &&
-                                 queue[queueIndex].top().getPos().getYPos() == nextDirection.getYPos())) {
+                        while (!(queue[queueIndex].top().getPos().x == nextDirection.x &&
+                                 queue[queueIndex].top().getPos().y == nextDirection.y)) {
                             queue[1 - queueIndex].push(queue[queueIndex].top());
                             queue[queueIndex].pop();
                         }
@@ -255,13 +220,13 @@ public:
     std::list<Point *> *makePatch(Point start) {
         std::list<Point *> *l = new std::list<Point *>;
         char c;
-        int x = start.getXPos();
-        int y = start.getYPos();
+        int x = start.x;
+        int y = start.y;
         for (unsigned int i = 0; i < path.length(); i++) {
             c = path.at(i);
             int dirX = (int) (c - 48);
-            x = x + directions[dirX].getXPos();
-            y = y + directions[dirX].getYPos();
+            x = x + directions[dirX].x;
+            y = y + directions[dirX].y;
             l->push_back(new Point(x, y));
             if(i == path.length() / 2) {
                 middleOfPath = Point(x, y);

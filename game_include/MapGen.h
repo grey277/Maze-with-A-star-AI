@@ -17,10 +17,12 @@ public:
     }
 
     int ** getMaze() { return maze; }
+
 private:
     int _height;
     int _width;
     int **maze;
+
     void generateMaze() {
         for(int i = 0; i < _height; i++) {
             maze[i] = new int[_width];
