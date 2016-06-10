@@ -5,6 +5,8 @@
 #ifndef QUAKEWITHSOCKETS_GAME_H
 #define QUAKEWITHSOCKETS_GAME_H
 
+#include <boost/shared_ptr.hpp>
+
 #include "findShortestPath.h"
 #include "Map.h"
 #include "Player.h"
@@ -15,18 +17,16 @@ using namespace std;
 
 class Game {
 public:
-    Game(client* client, Map *map) : _map(map), _client(client) {
+    Game(boost::shared_ptr<client> client, boost::shared_ptr<Map> map) : _map(map), _client(client) {
     }
 
     void addPlayer() {
         _players.push_back(new Player(2, 2, _client, _map));
     }
 
-    Map* getMap() { return _map; }
-
 private:
-    Map *_map;
+    boost::shared_ptr<Map> _map;
     vector<Player*> _players;
-    client* _client;
+    boost::shared_ptr<client> _client;
 };
 #endif //QUAKEWITHSOCKETS_GAME_H

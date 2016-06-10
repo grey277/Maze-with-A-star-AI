@@ -10,9 +10,9 @@
 
 class Renderer {
 private:
-    Map* _map;
+    boost::shared_ptr<Map> _map;
 public:
-    Renderer(Map* map) : _map(map) {
+    Renderer(boost::shared_ptr<Map> map) : _map(map) {
         initscr();
         raw();
         cbreak();

@@ -21,12 +21,11 @@ typedef std::deque<message> message_queue;
 class client {
 public:
     client(boost::asio::io_service& io_service,
-    tcp::resolver::iterator endpoint_iterator, Map *map, Renderer *renderer) : io_service_(io_service), socket_(io_service), _map(map), _renderer(renderer) {
+    tcp::resolver::iterator endpoint_iterator, boost::shared_ptr<Map> map, boost::shared_ptr<Renderer> renderer) : io_service_(io_service), socket_(io_service), _map(map), _renderer(renderer) {
         connect(endpoint_iterator);
     }
 
-    void write(const message& msg)
-    {
+    void write(const message& msg) {
         io_service_.post(
                 [this, msg]()
                 {
@@ -39,15 +38,13 @@ public:
                 });
     }
 
-    void close()
-    {
+    void close() {
         io_service_.post([this]() { socket_.close(); });
     }
 
 private:
 
-    void connect(tcp::resolver::iterator endpoint_iterator)
-    {
+    void connect(tcp::resolver::iterator endpoint_iterator) {
         boost::asio::async_connect(socket_, endpoint_iterator,
                                    [this](boost::system::error_code ec, tcp::resolver::iterator)
                                    {
@@ -58,8 +55,7 @@ private:
                                    });
     }
 
-    void do_read_header()
-    {
+    void do_read_header() {
         boost::asio::async_read(socket_,
                                 boost::asio::buffer(read_msg_.data(), message::header_length),
                                 [this](boost::system::error_code ec, std::size_t /*length*/)
@@ -75,8 +71,7 @@ private:
                                 });
     }
 
-    void do_read_body()
-    {
+    void do_read_body() {
         boost::asio::async_read(socket_,
                                 boost::asio::buffer(read_msg_.body(), read_msg_.body_length()),
                                 [this](boost::system::error_code ec, std::size_t /*length*/)
@@ -84,24 +79,24 @@ private:
                                     if (!ec)
                                     {
                                         if(read_msg_.messageType() == message::type::mapm) {
-                                            _map->changeMap(read_msg_.body(), read_msg_.body_length());
-                                            _renderer->render();
+                                            (*_map).changeMap(read_msg_.body(), read_msg_.body_length());
+                                            (*_renderer).render();
                                         } else if(read_msg_.messageType() == message::type::botPosition) {
                                             std::string s(read_msg_.body());
                                             std::string oldX = s.substr(0, s.find_first_of(","));
                                             std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
                                             std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
                                             std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 1);
-                                            _map->updateBotPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-                                            _renderer->render();
+                                            (*_map).updateBotPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+                                            (*_renderer).render();
                                         } else if (read_msg_.messageType() == message::type::playerPosition) {
                                             std::string s(read_msg_.body());
                                             std::string oldX = s.substr(0, s.find_first_of(","));
                                             std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
                                             std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
-                                            std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 1);
-                                            _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-                                            _renderer->render();
+                                            std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 2); //null char
+                                            (*_map).updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+                                            (*_renderer).render();
                                         }
 
 
@@ -114,8 +109,7 @@ private:
                                 });
     }
 
-    void do_write()
-    {
+    void do_write() {
         boost::asio::async_write(socket_,
                                  boost::asio::buffer(write_msgs_.front().data(),
                                                      write_msgs_.front().length()),
@@ -136,15 +130,12 @@ private:
                                  });
     }
 
-
-
-
     boost::asio::io_service& io_service_;
     tcp::socket socket_;
     message read_msg_;
     message_queue write_msgs_;
-    Map *_map;
-    Renderer *_renderer;
+    boost::shared_ptr<Map> _map;
+    boost::shared_ptr<Renderer> _renderer;
 };
 
 #endif //QUAKEWITHSOCKETS_CLIENT_H

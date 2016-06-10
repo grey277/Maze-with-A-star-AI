@@ -14,19 +14,16 @@
 
 int main() {
     boost::shared_ptr<boost::asio::io_service> io_service_client(new boost::asio::io_service);
-    //boost::shared_ptr<boost::asio::io_service::work> work_client(new boost::asio::io_service::work( *io_service_client ));
-    //threads.create_thread(boost::bind(&startClient, io_service_client));
     tcp::resolver resolver(*io_service_client);
     auto endpoint_iterator = resolver.resolve({"localhost", "4009"});
-    Map m(60, 30);
-    Renderer r(&m);
-    client c(*io_service_client, endpoint_iterator, &m, &r);
+    boost::shared_ptr<Map> m(new Map(60, 30));
+    boost::shared_ptr<Renderer> r(new Renderer(m));
+    boost::shared_ptr<client> c(new client(*io_service_client, endpoint_iterator, m, r));
     std::thread t([&io_service_client](){ io_service_client->run(); });
-    Game game(&c, &m);
+
+    Game game(c, m);
     game.addPlayer();
 
-    //while(true) { }
-
-    c.close();
+    c->close();
     return 0;
 }

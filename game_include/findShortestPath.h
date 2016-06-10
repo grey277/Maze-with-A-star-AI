@@ -75,7 +75,7 @@ public:
 };
 
 class FindShortestPath {
-    Map *_map;
+    boost::shared_ptr<Map> _map;
     int **closedNodesMap; // map of visited Nodes
     int **openNodesMap; // map of not visited Nodes
     int **directionMap; // map of directions
@@ -92,7 +92,7 @@ class FindShortestPath {
     Point middleOfPath;
 
 public:
-    FindShortestPath(Map *map)
+    FindShortestPath(boost::shared_ptr<Map> map)
             : _map(map), directions{Point(1, 0), Point(0, 1), Point(-1, 0), Point(0, -1)} {
 
         horizontalSize = _map->getHorizontalSize();
@@ -116,9 +116,9 @@ public:
         }
     }
 
-    void setMap(Map *map) {
-        _map = map;
-    }
+    //void setMap(Map *map) {
+    //    _map = map;
+    //}
 
     Point pathFind(const Point start, const Point finish) {
         priority_queue<Node> queue[2]; // list of not visited Nodes

@@ -13,12 +13,12 @@
 
 class Player {
 private:
-    client* _client;
-    Map* _map;
+    boost::shared_ptr<client> _client;
+    boost::shared_ptr<Map> _map;
     int x;
     int y;
 public:
-    Player(int startX, int startY, client* client, Map* map) : _client(client), _map(map) {
+    Player(int startX, int startY, boost::shared_ptr<client> client, boost::shared_ptr<Map> map) : _client(client), _map(map) {
         x = startX;
         y = startY;
         _map->setPlayerPosition(x, y);

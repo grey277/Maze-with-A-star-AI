@@ -14,15 +14,15 @@
 
 class Bot {
 private:
-    server *_server;
-    Map *_map;
+    boost::shared_ptr<server> _server;
+    boost::shared_ptr<Map> _map;
     int x;
     int y;
 
     std::list<Point *> *path;
 
 public:
-    Bot(int startX, int startY, server *server, Map *map) : _server(server), _map(map) {
+    Bot(int startX, int startY, boost::shared_ptr<server> server, boost::shared_ptr<Map> map) : _server(server), _map(map) {
         x = startX;
         y = startY;
         _map->setBotPosition(x, y);

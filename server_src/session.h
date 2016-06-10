@@ -17,7 +17,7 @@ typedef std::deque<message> message_queue;
 
 class room {
 public:
-    room(Map *map) : _map(map) { }
+    room(boost::shared_ptr<Map> map) : _map(map) { }
     void join(participant_ptr participant)
     {
         participants_.insert(participant);
@@ -73,7 +73,7 @@ private:
     std::set<participant_ptr> participants_;
     enum { max_recent_msgs = 1 };
     message_queue recent_msgs_;
-    Map *_map;
+    boost::shared_ptr<Map> _map;
 };
 
 class session : public participant, public std::enable_shared_from_this<session>{

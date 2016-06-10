@@ -30,7 +30,7 @@ using boost::asio::ip::tcp;
 
 class server {
 public:
-    server(boost::asio::io_service& io_service, const tcp::endpoint& endpoint, Map *map)
+    server(boost::asio::io_service& io_service, const tcp::endpoint& endpoint, boost::shared_ptr<Map> map)
             : acceptor_(io_service, endpoint),
               socket_(io_service), _map(map), _room(_map) {
         acc();
@@ -42,7 +42,7 @@ public:
 private:
     tcp::acceptor acceptor_;
     tcp::socket socket_;
-    Map *_map;
+    boost::shared_ptr<Map> _map;
     room _room;
     void acc() {
         acceptor_.async_accept(socket_,
