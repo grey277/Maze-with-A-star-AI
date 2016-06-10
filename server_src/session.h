@@ -23,6 +23,13 @@ public:
         participants_.insert(participant);
         for (auto msg : recent_msgs_)
             participant->deliver(msg);
+
+        message msg;
+        msg.body_length(std::strlen(_map->toCharStr()));
+        std::memcpy(msg.body(), _map->toCharStr(), msg.body_length());
+        msg.messageType(message::type::mapm);
+        msg.encode_header();
+        participant->deliver(msg);
     }
 
     void leave(participant_ptr participant)
@@ -38,17 +45,19 @@ public:
             std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
             std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
             std::string newY = s.substr(s.find_last_of(",") + 1, msg.body_length() - s.find_last_of(",") - 1);
-            try {
-                _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-                message msgToSend;
-                msgToSend.body_length(std::strlen(_map->toCharStr()));
-                std::memcpy(msgToSend.body(), _map->toCharStr(), msgToSend.body_length());
-                msgToSend.messageType(message::type::mapm);
-                msgToSend.encode_header();
-                deliver(msgToSend);
-            } catch(exception &e) {
+            //try {
+            _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+            message msgToSend;
+            msgToSend.body_length(s.length() + 1); // for null char
+            std::memcpy(msgToSend.body(), s.c_str(), msgToSend.body_length());
+            msgToSend.messageType(message::type::playerPosition);
+            msgToSend.encode_header();
+            for (auto participant: participants_)
+                participant->deliver(msgToSend);
 
-            }
+           //} catch(exception &e) {
+
+           //}
         } else {
             recent_msgs_.push_back(msg);
             while (recent_msgs_.size() > max_recent_msgs)

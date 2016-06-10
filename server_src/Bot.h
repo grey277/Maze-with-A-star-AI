@@ -48,14 +48,16 @@ public:
         path->pop_front();
         if (_map->canMove(p->x, p->y)) {
             _map->updateBotPosition(x, y, p->x, p->y);
-            x = p->x;
-            y = p->y;
         }
         message msg;
-        msg.body_length(std::strlen(_map->toCharStr()));
-        std::memcpy(msg.body(), _map->toCharStr(), msg.body_length());
-        msg.messageType(message::type::mapm);
+        string s;
+        s += std::to_string(x) + "," + std::to_string(y) + " " + std::to_string(p->x) + "," + std::to_string(p->y);
+        msg.body_length(s.length());
+        std::memcpy(msg.body(), s.c_str(), msg.body_length());
+        msg.messageType(message::type::botPosition);
         msg.encode_header();
+        x = p->x;
+        y = p->y;
         (*_server).getRoom()->deliver(msg);
         return true;
     }

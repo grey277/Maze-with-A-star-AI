@@ -9,7 +9,7 @@ class message {
 public:
     enum { header_length = 5 };
     enum { max_body_length = 2048 };
-    enum type { mapm = 1, playerPosition = 2 };
+    enum type { mapm = 1, playerPosition = 2, botPosition = 3 };
 
     message() : _body_length(0) { }
 

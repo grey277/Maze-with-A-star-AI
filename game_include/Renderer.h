@@ -32,21 +32,21 @@ public:
         for (int y = 1; y < _map->getVerticalSize(); y++) {
             for (int x = 1; x < _map->getHorizontalSize(); x++) {
                 switch((*_map)(x,y)){
-                    case 0:
+                    case WALL:
                         attron(COLOR_PAIR(1));
                         mvaddch(y, x, ACS_CKBOARD);
                         //mvaddch(y,x,'O');
                         break;
-                    case 1:
+                    case PLAYER:
                         mvaddch(y,x,'F');
                         break;
-                    case 2:
+                    case ENEMY:
                         mvaddch(y,x,'S');
                         break;
-                    case 4:
+                    case NOTHING:
                         //mvaddch(y,x,'.');
                         break;
-                    case 5:
+                    case DIAMOND:
                         mvaddch(y,x, ACS_DIAMOND);
                         break;
                     default:

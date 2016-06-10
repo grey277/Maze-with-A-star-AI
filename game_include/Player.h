@@ -11,8 +11,6 @@
 #include <iostream>
 #include <thread>
 
-using namespace std;
-
 class Player {
 private:
     client* _client;
@@ -29,6 +27,7 @@ public:
 
     void startThread() {
         while(true) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
             char ch;
             ch = getch();
             if(ch > 0) {

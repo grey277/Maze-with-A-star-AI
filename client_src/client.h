@@ -86,8 +86,26 @@ private:
                                         if(read_msg_.messageType() == message::type::mapm) {
                                             _map->changeMap(read_msg_.body(), read_msg_.body_length());
                                             _renderer->render();
-                                            do_read_header();
+                                        } else if(read_msg_.messageType() == message::type::botPosition) {
+                                            std::string s(read_msg_.body());
+                                            std::string oldX = s.substr(0, s.find_first_of(","));
+                                            std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
+                                            std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
+                                            std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 1);
+                                            _map->updateBotPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+                                            _renderer->render();
+                                        } else if (read_msg_.messageType() == message::type::playerPosition) {
+                                            std::string s(read_msg_.body());
+                                            std::string oldX = s.substr(0, s.find_first_of(","));
+                                            std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
+                                            std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
+                                            std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 1);
+                                            _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
+                                            _renderer->render();
                                         }
+
+
+                                        do_read_header();
                                     }
                                     else
                                     {
