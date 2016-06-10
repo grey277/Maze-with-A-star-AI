@@ -141,23 +141,6 @@ public:
         return map;
     }
 
-//    string objectTypeToString(objectType o){
-//        switch(0){
-//            case '0':
-//                return "WALL";
-//            case '1':
-//                return "PLAYER";
-//            case '2':
-//                return "ENEMY";
-//            case '4':
-//                return "NOTHING";
-//            case '5':
-//                return "DIAMOND";
-//            default:
-//                return "";
-//        }
-//    }
-
     int didWon(){
         if(map[diamond.x + 1][diamond.y] == PLAYER || map[diamond.x - 1][diamond.y] == PLAYER
            || map[diamond.x][diamond.y + 1] == PLAYER || map[diamond.x][diamond.y - 1] == PLAYER)

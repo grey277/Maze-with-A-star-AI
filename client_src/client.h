@@ -79,8 +79,7 @@ private:
                                 boost::asio::buffer(read_msg_.body(), read_msg_.body_length()),
                                 [this](boost::system::error_code ec, std::size_t /*length*/)
                                 {
-                                    bool didWon = false;
-                                    if (!ec || !didWon)
+                                    if (!ec)
                                     {
                                         if(read_msg_.messageType() == message::type::mapm) {
                                             (*_map).changeMap(read_msg_.body(), read_msg_.body_length());
@@ -121,8 +120,8 @@ private:
                                             }
                                         }
                                         else if(read_msg_.messageType() == message::type::endGame) {
-                                            didWon = true;
-                                            (*_renderer).printWinText((int) read_msg_.body()[0]);
+                                            _renderer->printWinText(std::stoi(std::string(read_msg_.body())));
+                                            socket_.close();
                                         }
 
                                         do_read_header();

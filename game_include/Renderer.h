@@ -23,11 +23,12 @@ private:
     int looseText[37][5] = {{1,0,0,0,0},{0,1,0,0,0},{0,0,1,1,1},{0,1,0,0,0},{1,0,0,0,0},
                             {0,0,0,0,0},{1,1,1,1,1},{1,0,0,0,1},{1,0,0,0,1},{1,1,1,1,1},
                             {0,0,0,0,0},{1,1,1,1,1},{0,0,0,0,1},{0,0,0,0,1},{1,1,1,1,1},
-                            {0,0,0,0,0},{0,1,0,0,0},{0,1,0,0,0},{0,1,0,0,0},{0,1,0,0,0},
-                            {1,1,1,1,1},{0,0,0,0,0},{1,1,1,1,1},{1,0,0,0,1},{1,0,0,0,1},
-                            {1,1,1,1,1},{0,1,1,1,1},{0,1,0,0,0},{0,1,1,1,1},{0,0,0,0,1},
-                            {0,1,1,1,1},{0,1,1,1,1},{0,0,0,1,0},{0,0,0,1,0},{0,0,0,1,0},
-                            {0,0,0,1,0},{1,0,0,0,0}};
+                            {0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},
+                            {1,1,1,1,1},{0,0,0,0,1},{0,0,0,0,1},{0,0,0,0,1},
+                            {0,0,0,0,0},{1,1,1,1,1},{1,0,0,0,1},{1,0,0,0,1},
+                            {1,1,1,1,1},{0,0,0,0,0},{1,1,1,0,1},{1,0,1,0,1},{1,0,1,0,1},
+                            {1,0,1,1,1},{0,0,0,0,0},{1,1,1,1,1},{1,0,1,0,1},{1,0,1,0,1},
+                            {1,0,1,0,1}};
 
 public:
     Renderer(boost::shared_ptr<Map> map) : _map(map) {
@@ -46,7 +47,8 @@ public:
     void printTable() {
         start_color();
         init_pair(1, COLOR_BLACK, COLOR_RED);
-        //init_pair(2, COLOR_BLACK, COLOR_GREEN);
+        init_pair(2, COLOR_BLACK, COLOR_BLACK);
+        init_pair(3, COLOR_WHITE, COLOR_BLACK);
         for (int y = 1; y < _map->getVerticalSize(); y++) {
             for (int x = 1; x < _map->getHorizontalSize(); x++) {
                 switch((*_map)(x,y)){
@@ -62,9 +64,11 @@ public:
                         mvaddch(y,x,'S');
                         break;
                     case NOTHING:
+                        attron(COLOR_PAIR(2));
                         mvaddch(y,x,' ');
                         break;
                     case DIAMOND:
+                        attron(COLOR_PAIR(3));
                         mvaddch(y,x, ACS_DIAMOND);
                         break;
                     default:
@@ -107,10 +111,12 @@ public:
     }
 
     void printWinTable(){
+        init_pair(1, COLOR_BLUE, COLOR_BLACK);
         for(int x = 0; x < 35; x++){
             for(int y = 0; y < 5; y++){
                 switch (winText[x][y]){
                     case 1:
+                        attron(COLOR_PAIR(1));
                         mvaddch(y, x, ACS_CKBOARD );
                         break;
                     case 0:
@@ -124,10 +130,12 @@ public:
     }
 
     void printLooseTable(){
+        init_pair(1, COLOR_BLUE, COLOR_BLACK);
         for(int x = 0; x < 37; x++){
             for(int y = 0; y < 5; y++){
-                switch (winText[x][y]){
+                switch (looseText[x][y]){
                     case 1:
+                        attron(COLOR_PAIR(1));
                         mvaddch(y, x, ACS_CKBOARD );
                         break;
                     case 0:
@@ -142,9 +150,9 @@ public:
 
     void printWinText(int whoWon){
         clear();
-        if(whoWon == 47)
+        if(whoWon == PLAYER)
             printWinTable();
-        if(whoWon == 49)
+        if(whoWon == ENEMY)
             printLooseTable();
         refresh();
     }

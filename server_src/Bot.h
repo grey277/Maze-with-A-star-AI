@@ -36,9 +36,11 @@ public:
         _map->setDiamond(f.getMiddle().x, f.getMiddle().y);
 
         while (!path->empty()) {
+            if(_map->didWon() != NOTHING)
+                break;
             boost::thread t(boost::bind(&Bot::startThread, this));
             t.join();
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
 
     }
