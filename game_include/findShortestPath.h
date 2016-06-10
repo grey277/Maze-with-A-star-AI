@@ -116,10 +116,6 @@ public:
         }
     }
 
-    //void setMap(Map *map) {
-    //    _map = map;
-    //}
-
     Point pathFind(const Point start, const Point finish) {
         priority_queue<Node> queue[2]; // list of not visited Nodes
         int queueIndex = 0;
@@ -174,7 +170,7 @@ public:
                 if (nextDirection.x >= 0 && nextDirection.x <= horizontalSize - 1
                     && nextDirection.y >= 0 && nextDirection.y <= verticalSize - 1
                     &&
-                    _map->operator()(nextDirection.x, nextDirection.y) != WALL //TODO, check operator()
+                    _map->operator()(nextDirection.x, nextDirection.y) != WALL
                     && closedNodesMap[nextDirection.x][nextDirection.y] != 1) {
 
                     Node m0(nextDirection, n0.getTraveled(), n0.getPriority());

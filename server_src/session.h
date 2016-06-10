@@ -41,19 +41,28 @@ public:
     {
         if(msg.messageType() == message::type::playerPosition) {
             std::string s(msg.body());
-            std::string oldX = s.substr(0, s.find_first_of(","));
-            std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
-            std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
-            std::string newY = s.substr(s.find_last_of(",") + 1, msg.body_length() - s.find_last_of(",") - 1);
-            //try {
-            _map->updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-            message msgToSend;
-            msgToSend.body_length(s.length() + 1); // for null char
-            std::memcpy(msgToSend.body(), s.c_str(), msgToSend.body_length());
-            msgToSend.messageType(message::type::playerPosition);
-            msgToSend.encode_header();
-            for (auto participant: participants_)
-                participant->deliver(msgToSend);
+            std::vector<std::string> tokens;
+            char *m = const_cast<char*>(s.c_str());
+            char * p;
+            p = strtok (m,",");
+            while (p != NULL) {
+                tokens.push_back(std::string(p));
+                p = strtok (NULL, ",");
+            }
+            if(tokens.size() == 4) {
+                _map->updatePlayerPosition(std::stoi(tokens[0]), std::stoi(tokens[1]), std::stoi(tokens[2]), std::stoi(tokens[3]));
+                std::string sMsg = "";
+                sMsg += tokens[0] + "," + tokens[1] + "," + tokens[2] + "," + tokens[3] + ",";
+                message msgToSend;
+                msgToSend.body_length(sMsg.length()); // for null char
+                memset(msgToSend.body(), 0, msgToSend.body_length());
+                std::memcpy(msgToSend.body(), sMsg.c_str(), msgToSend.body_length());
+                msgToSend.messageType(message::type::playerPosition);
+                msgToSend.encode_header();
+                for (auto participant: participants_)
+                    participant->deliver(msgToSend);
+            }
+
 
            //} catch(exception &e) {
 

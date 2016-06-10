@@ -9,6 +9,9 @@
 #include <boost/array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
 
 #include "../include/message.h"
 #include "../game_include/Map.h"
@@ -83,20 +86,38 @@ private:
                                             (*_renderer).render();
                                         } else if(read_msg_.messageType() == message::type::botPosition) {
                                             std::string s(read_msg_.body());
-                                            std::string oldX = s.substr(0, s.find_first_of(","));
-                                            std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
-                                            std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
-                                            std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 1);
-                                            (*_map).updateBotPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-                                            (*_renderer).render();
+                                            std::vector<std::string> tokens;
+                                            char *m = const_cast<char*>(s.c_str());
+                                            char * p;
+                                            p = strtok (m,",");
+                                            while (p != NULL && tokens.size() != 4) {
+                                                tokens.push_back(std::string(p));
+                                                p = strtok (NULL, ",");
+                                            }
+                                            //std::cout << tokens.size() << std::endl;
+                                            if(tokens.size() == 4) {
+                                                _map->updateBotPosition(std::stoi(tokens[0]), std::stoi(tokens[1]), std::stoi(tokens[2]), std::stoi(tokens[3]));
+                                                _renderer->render(std::stoi(tokens[0]), std::stoi(tokens[1]));
+                                                _renderer->render(std::stoi(tokens[2]), std::stoi(tokens[3]));
+                                            }
+
+
                                         } else if (read_msg_.messageType() == message::type::playerPosition) {
                                             std::string s(read_msg_.body());
-                                            std::string oldX = s.substr(0, s.find_first_of(","));
-                                            std::string oldY = s.substr(s.find_first_of(",") + 1, s.find_first_of(" ") - s.find_first_of(",") - 1);
-                                            std::string newX = s.substr(s.find_first_of(" ") + 1, s.find_last_of(",") - s.find_first_of(" ") - 1);
-                                            std::string newY = s.substr(s.find_last_of(",") + 1, read_msg_.body_length() - s.find_last_of(",") - 2); //null char
-                                            (*_map).updatePlayerPosition(std::stoi(oldX), std::stoi(oldY), std::stoi(newX), std::stoi(newY));
-                                            (*_renderer).render();
+                                            std::vector<std::string> tokens;
+                                            char *m = const_cast<char*>(s.c_str());
+                                            char * p;
+                                            p = strtok (m,",");
+                                            while (p != NULL && tokens.size() != 4) {
+                                                tokens.push_back(std::string(p));
+                                                p = strtok (NULL, ",");
+                                            }
+                                            unsigned long size = tokens.size();
+                                            if(size == 4) {
+                                                _map->updatePlayerPosition(std::stoi(tokens[0]), std::stoi(tokens[1]), std::stoi(tokens[2]), std::stoi(tokens[3]));
+                                                _renderer->render(std::stoi(tokens[0]), std::stoi(tokens[1]));
+                                                _renderer->render(std::stoi(tokens[2]), std::stoi(tokens[3]));
+                                            }
                                         }
 
 

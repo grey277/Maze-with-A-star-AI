@@ -44,7 +44,7 @@ public:
                         mvaddch(y,x,'S');
                         break;
                     case NOTHING:
-                        //mvaddch(y,x,'.');
+                        mvaddch(y,x,' ');
                         break;
                     case DIAMOND:
                         mvaddch(y,x, ACS_DIAMOND);
@@ -54,6 +54,32 @@ public:
                 }
             }
         }
+    }
+
+    void render(int x, int y) {
+        start_color();
+        init_pair(1, COLOR_BLACK, COLOR_RED);
+        switch((*_map)(x,y)){
+            case WALL:
+                attron(COLOR_PAIR(1));
+                mvaddch(y, x, ACS_CKBOARD);
+                break;
+            case PLAYER:
+                mvaddch(y,x,'F');
+                break;
+            case ENEMY:
+                mvaddch(y,x,'S');
+                break;
+            case NOTHING:
+                mvaddch(y,x,' ');
+                break;
+            case DIAMOND:
+                mvaddch(y,x, ACS_DIAMOND);
+                break;
+            default:
+                throw std::invalid_argument("bad wolf");
+        }
+        refresh();
     }
 
     void render(){

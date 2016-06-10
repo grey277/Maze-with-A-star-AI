@@ -51,7 +51,7 @@ public:
         }
         message msg;
         string s;
-        s += std::to_string(x) + "," + std::to_string(y) + " " + std::to_string(p->x) + "," + std::to_string(p->y);
+        s += std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(p->x) + "," + std::to_string(p->y) + ",";
         msg.body_length(s.length());
         std::memcpy(msg.body(), s.c_str(), msg.body_length());
         msg.messageType(message::type::botPosition);
