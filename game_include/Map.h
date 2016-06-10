@@ -45,6 +45,8 @@ public:
             : horizontalSize(horizontalSize), verticalSize(verticalSize), playerPosition(2, 2) {
         MapGen gen(horizontalSize, verticalSize);
         map = gen.getMaze();
+
+        setPlayerPosition(2, 2);
     }
 
     void setDiamond(int x, int y) {

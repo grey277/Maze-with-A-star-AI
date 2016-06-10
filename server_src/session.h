@@ -95,6 +95,7 @@ public:
         }
     }
 
+    bool start() { return participants_.size(); }
 
 private:
     std::set<participant_ptr> participants_;

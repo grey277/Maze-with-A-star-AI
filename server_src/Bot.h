@@ -35,6 +35,8 @@ public:
 
         _map->setDiamond(f.getMiddle().x, f.getMiddle().y);
 
+        while(!_server->getRoom()->start()) { }
+
         while (!path->empty()) {
             if(_map->didWon() != NOTHING)
                 break;
