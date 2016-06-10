@@ -142,9 +142,9 @@ public:
 
     void printWinText(int whoWon){
         clear();
-        if(whoWon == 49)
+        if(whoWon == 47)
             printWinTable();
-        if(whoWon == 50)
+        if(whoWon == 49)
             printLooseTable();
         refresh();
     }
