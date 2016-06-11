@@ -1,5 +1,5 @@
 #ifndef SERVER_H
-#define ERVER_H
+#define SERVER_H
 
 #include "message.h"
 

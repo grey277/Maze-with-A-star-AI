@@ -16,7 +16,7 @@ public:
 
 private:
     boost::shared_ptr<Map> _map;
-    vector<Player *> _players;
+    uj::list<Player *> _players;
     boost::shared_ptr<client> _client;
 };
 

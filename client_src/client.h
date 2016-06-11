@@ -1,7 +1,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <deque>
 #include "list.hpp"
 #include "message.h"
 #include "Map.h"
