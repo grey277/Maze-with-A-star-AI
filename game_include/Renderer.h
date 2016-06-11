@@ -1,5 +1,5 @@
-#ifndef QUAKE_RENDERER_H
-#define QUAKE_RENDERER_H
+#ifndef RENDERER_H
+#define RENDERER_H
 
 #include <ncurses.h>
 
@@ -210,4 +210,4 @@ public:
 };
 
 
-#endif //QUAKE_RENDERER_H
+#endif //RENDERER_H

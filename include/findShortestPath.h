@@ -1,7 +1,7 @@
-#ifndef QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
-#define QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
+#ifndef FINDSHORTESTPATH_H
+#define INDSHORTESTPATH_H
 
-#include <queue>
+#include "priority_queue.h"
 
 using namespace std;
 
@@ -13,6 +13,7 @@ class Node {
     int priority;
 
 public:
+    Node() : pos(1, 1), traveled(1), priority(1) { }
     Node(int x, int y, int t, int p) {
         pos = Point(x, y);
         traveled = t;
@@ -31,10 +32,11 @@ public:
         priority = node.priority;
     }
 
-    void operator=(Node node) {
+    Node& operator=(const Node& node) {
         pos = node.pos;
         traveled = node.traveled;
         priority = node.priority;
+        return *this;
     }
 
     bool operator<(const Node &other) const {
@@ -103,6 +105,12 @@ public:
                 openNodesMap[x][y] = 0;
             }
         }
+    }
+
+    ~FindShortestPath() {
+        delete [] closedNodesMap;
+        delete [] openNodesMap;
+        delete [] directionMap;
     }
 
     Point pathFind(const Point start, const Point finish) {
@@ -202,8 +210,8 @@ public:
         return start; // no route found
     }
 
-    std::list<Point *> *makePatch(Point start) {
-        std::list<Point *> *l = new std::list<Point *>;
+    uj::list<Point *>* makePatch(Point start) {
+        uj::list<Point *> *l = new uj::list<Point *>;
         char c;
         int x = start.x;
         int y = start.y;
@@ -224,4 +232,4 @@ public:
     Point getMiddle() { return middleOfPath; }
 };
 
-#endif //QUAKEWITHSOCKETS_FINDSHORTESTPATH_H
+#endif //FINDSHORTESTPATH_H

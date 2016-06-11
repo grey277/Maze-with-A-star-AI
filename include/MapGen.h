@@ -1,3 +1,6 @@
+#ifndef MAPGEN_H
+#define MAPGEN_H
+
 class MapGen {
 public:
     MapGen(int height, int width) : _height(height), _width(width) {
@@ -102,5 +105,7 @@ private:
     }
 
 };
+
+#endif //MAPGEN_H
 
 

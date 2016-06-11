@@ -1,5 +1,5 @@
-#ifndef QUAKE_PLAYER_H
-#define QUAKE_PLAYER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <thread>
 
@@ -86,4 +86,4 @@ public:
     int getY() { return y; }
 };
 
-#endif //QUAKE_PLAYER_H
+#endif //PLAYER_H

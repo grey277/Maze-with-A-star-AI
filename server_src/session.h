@@ -1,9 +1,10 @@
-#ifndef QUAKEWITHSOCKETS_SESSION_H
-#define QUAKEWITHSOCKETS_SESSION_H
+#ifndef SESSION_H
+#define ESSION_H
 
 using boost::asio::ip::tcp;
+#include "list.hpp"
 
-typedef std::deque<message> message_queue;
+typedef uj::list<message> message_queue;
 
 class room {
 public:
@@ -167,4 +168,4 @@ private:
 };
 
 
-#endif //QUAKEWITHSOCKETS_SESSION_H
+#endif //SESSION_H

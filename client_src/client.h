@@ -1,14 +1,15 @@
-#ifndef QUAKEWITHSOCKETS_CLIENT_H
-#define QUAKEWITHSOCKETS_CLIENT_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <deque>
+#include "list.hpp"
 #include "message.h"
 #include "Map.h"
 #include "Renderer.h"
 
 using boost::asio::ip::tcp;
 
-typedef std::deque<message> message_queue;
+typedef uj::list<message> message_queue;
 
 class client {
 public:
@@ -75,7 +76,6 @@ private:
                                                 tokens.push_back(std::string(p));
                                                 p = strtok(NULL, ",");
                                             }
-                                            //std::cout << tokens.size() << std::endl;
                                             if (tokens.size() == 4) {
                                                 _map->updateBotPosition(std::stoi(tokens[0]), std::stoi(tokens[1]),
                                                                         std::stoi(tokens[2]), std::stoi(tokens[3]));
@@ -140,4 +140,4 @@ private:
     boost::shared_ptr<Renderer> _renderer;
 };
 
-#endif //QUAKEWITHSOCKETS_CLIENT_H
+#endif //CLIENT_H

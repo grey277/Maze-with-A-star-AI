@@ -1,5 +1,5 @@
-#ifndef QUAKEWITHSOCKETS_SERVER_H
-#define QUAKEWITHSOCKETS_SERVER_H
+#ifndef SERVER_H
+#define ERVER_H
 
 #include "message.h"
 
@@ -47,4 +47,4 @@ private:
     }
 };
 
-#endif //QUAKEWITHSOCKETS_SERVER_H
+#endif //SERVER_H

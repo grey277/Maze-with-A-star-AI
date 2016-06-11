@@ -1,5 +1,5 @@
-#ifndef QUAKEWITHSOCKETS_MESSAGE_H
-#define QUAKEWITHSOCKETS_MESSAGE_H
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 class message {
 public:
@@ -61,4 +61,4 @@ private:
     type _messageType;
 };
 
-#endif //QUAKEWITHSOCKETS_MESSAGE_H
+#endif //ESSAGE_H

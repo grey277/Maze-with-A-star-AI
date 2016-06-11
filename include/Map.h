@@ -1,5 +1,5 @@
-#ifndef QUAKE_MAP_H
-#define QUAKE_MAP_H
+#ifndef MAP_H
+#define MAP_H
 
 #include <mutex>
 #include "MapGen.h"

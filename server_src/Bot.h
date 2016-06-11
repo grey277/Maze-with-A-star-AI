@@ -1,5 +1,5 @@
-#ifndef QUAKE_BOT_H
-#define QUAKE_BOT_H
+#ifndef BOT_H
+#define BOT_H
 
 #include "findShortestPath.h"
 #include <thread>
@@ -11,7 +11,7 @@ private:
     int x;
     int y;
 
-    std::list<Point *> *path;
+    uj::list<Point *> *path;
 
 public:
     Bot(int startX, int startY, boost::shared_ptr<server> server, boost::shared_ptr<Map> map) : _server(server),
@@ -35,7 +35,7 @@ public:
                 break;
             boost::thread t(boost::bind(&Bot::startThread, this));
             t.join();
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
 
     }
@@ -66,4 +66,4 @@ public:
 };
 
 
-#endif //QUAKE_BOT_H
+#endif //BOT_H

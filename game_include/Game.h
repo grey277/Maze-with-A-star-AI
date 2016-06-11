@@ -1,5 +1,5 @@
-#ifndef QUAKEWITHSOCKETS_GAME_H
-#define QUAKEWITHSOCKETS_GAME_H
+#ifndef GAME_H
+#define GAME_H
 
 #include "Player.h"
 
@@ -20,4 +20,4 @@ private:
     boost::shared_ptr<client> _client;
 };
 
-#endif //QUAKEWITHSOCKETS_GAME_H
+#endif //GAME_H
